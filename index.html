@@ -417,15 +417,16 @@
     .player-name {
       font-weight: 600; font-size: 0.9rem;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      max-width: 220px;
     }
-    .player-genre { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
+    .player-genre { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .player-track {
-      font-size: 0.72rem; color: var(--accent); margin-top: 2px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      max-width: 220px; min-height: 0; transition: all 0.3s;
+      font-size: 0.72rem; color: var(--accent); margin-top: 3px;
+      white-space: nowrap; overflow: hidden;
+      min-height: 0;
     }
     .player-track:empty { display: none; }
+    .player-track.scrolling { animation: marquee 14s linear infinite; display: block; }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.33%); } }
 
     .player-controls { display: flex; align-items: center; gap: 12px; }
     .player-play-btn {
@@ -1588,7 +1589,11 @@ async function fetchIcyMeta() {
       const data = await resp.json();
       if (data.title && data.title.trim()) {
         const el = document.getElementById('player-track');
-        if (el) el.textContent = data.title;
+        if (el) {
+          const t = data.title.trim();
+          el.textContent = t + '   •   ' + t + '   •   ' + t;
+          el.classList.add('scrolling');
+        }
         if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
           navigator.mediaSession.metadata.title = data.title;
         }
@@ -1652,7 +1657,7 @@ function concat(a, b) {
 function stopMetaPolling() {
   if (metaInterval) { clearInterval(metaInterval); metaInterval = null; }
   const el = document.getElementById('player-track');
-  if (el) el.textContent = '';
+  if (el) { el.textContent = ''; el.classList.remove('scrolling'); }
 }
 
 function updateMediaSession() {
@@ -1680,12 +1685,20 @@ function updatePlayerUI() {
     nameEl.textContent  = currentStation.name || 'RadioLive';
     genreEl.textContent = currentStation.desc || '';
 
-    // logo
+    // logo - single img, fallback to abbr initials
+    const ab = (currentStation.name || '??').substring(0, 2).toUpperCase();
     if (currentStation.imageURL) {
-      logoWrap.innerHTML = `<img class="player-logo" src="${escHtml(currentStation.imageURL)}" alt="" onerror="this.parentElement.innerHTML='<span style=\\"font-family:var(--font-mono);font-size:.7rem;color:#fff;font-weight:700\\">${(currentStation.name||'??').substring(0,2).toUpperCase()}</span>'">`;
+      logoWrap.innerHTML = '';
+      const img = document.createElement('img');
+      img.className = 'player-logo';
+      img.alt = '';
+      img.src = escHtml(currentStation.imageURL);
+      img.onerror = function() {
+        logoWrap.innerHTML = '<span style="font-family:var(--font-mono);font-size:.7rem;color:#fff;font-weight:700">' + ab + '</span>';
+      };
+      logoWrap.appendChild(img);
     } else {
-      const ab = (currentStation.name||'??').substring(0,2).toUpperCase();
-      logoWrap.innerHTML = `<span style="font-family:var(--font-mono);font-size:.7rem;color:#fff;font-weight:700">${ab}</span>`;
+      logoWrap.innerHTML = '<span style="font-family:var(--font-mono);font-size:.7rem;color:#fff;font-weight:700">' + ab + '</span>';
     }
   }
 
