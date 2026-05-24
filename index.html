@@ -1333,9 +1333,6 @@ async function loadStations(countryCode) {
     renderCountryBtns();
     extractGenres();
     applyFilters();
-    // Update station count across all countries (approximate)
-    const el = document.getElementById('stat-stations');
-    if (el) el.textContent = allStations.length > 0 ? allStations.length + '+' : '2000+';
   } catch(e) {
     document.getElementById('station-grid').innerHTML = `
       <div class="empty-state">
