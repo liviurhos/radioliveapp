@@ -475,8 +475,7 @@
     /* ═══════════════════════════════════════════
        PAGES (About, Privacy, Contact)
     ═══════════════════════════════════════════ */
-    .page-section { display: none; }
-    .page-section.visible { display: block; }
+    .page-section { display: none !important; }
 
     .page-content {
       max-width: 760px; margin: 0 auto;
@@ -806,7 +805,7 @@
 </div>
 
 <!-- ═══ PAGE: ABOUT ═══ -->
-<div class="app-layout page-section" id="page-about">
+<div class="app-layout" id="page-about">
   <div class="page-content fade-in">
     <h1>About <span style="color:var(--accent)">RadioLive</span></h1>
     <p class="page-intro">Your free, open-access radio player for the web — and available as a native app on Android & iOS.</p>
@@ -870,7 +869,7 @@
 </div>
 
 <!-- ═══ PAGE: FAQ ═══ -->
-<div class="app-layout page-section" id="page-faq">
+<div class="app-layout" id="page-faq">
   <div class="page-content fade-in">
     <h1>Frequently Asked <span style="color:var(--accent)">Questions</span></h1>
     <p class="page-intro">Everything you need to know about RadioLive — web, Android, and iOS.</p>
@@ -1124,7 +1123,7 @@
 </div>
 
 <!-- ═══ PAGE: CONTACT ═══ -->
-<div class="app-layout page-section" id="page-contact">
+<div class="app-layout" id="page-contact">
   <div class="page-content fade-in">
     <h1>Get in <span style="color:var(--accent)">Touch</span></h1>
     <p class="page-intro">Questions, station suggestions, bug reports — we'd love to hear from you.</p>
@@ -1235,33 +1234,29 @@ function toggleFaq(btn) {
    NAVIGATION
 ═══════════════════════════════════════════ */
 function showPage(page) {
-  document.querySelectorAll('.app-layout').forEach(el => {
-    el.classList.add('page-section');
-    el.classList.remove('visible');
+  // Hide all pages
+  ['home','about','faq','contact'].forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if (el) el.style.display = 'none';
   });
+  // Show target
   const target = document.getElementById('page-' + page);
-  if (target) {
-    target.classList.remove('page-section');
-    target.classList.add('visible');
-    // make it actually display
-    target.style.display = '';
-  }
-  // show all app-layouts that aren't page-sections
-  document.querySelectorAll('.app-layout:not(.page-section)').forEach(el => {
-    el.style.display = '';
-  });
-  // update nav
+  if (target) target.style.display = '';
+  // Update nav active state
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   const navEl = document.getElementById('nav-' + page);
   if (navEl) navEl.classList.add('active');
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 
-// Initial setup — show home
+// Initial setup — show home only
 (function() {
-  // Hide all page-sections except home
-  document.querySelectorAll('.page-section').forEach(el => { el.style.display = 'none'; });
-  document.getElementById('page-home').style.display = '';
+  ['about','faq','contact'].forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if (el) el.style.display = 'none';
+  });
+  const home = document.getElementById('page-home');
+  if (home) home.style.display = '';
 })();
 
 function toggleMobileNav() {
