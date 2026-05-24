@@ -110,12 +110,11 @@
     }
     .logo-icon {
       width: 34px; height: 34px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
       border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 14px var(--accent-glow);
+      overflow: hidden;
+      flex-shrink: 0;
     }
-    .logo-icon svg { width: 18px; height: 18px; fill: white; }
     .logo-text span { color: var(--accent); }
 
     .header-nav { display: flex; align-items: center; gap: 6px; }
@@ -222,7 +221,9 @@
     /* Sidebar */
     .sidebar {
       position: sticky; top: calc(var(--header-h) + 16px);
-      height: fit-content;
+      height: calc(100vh - var(--header-h) - var(--player-h) - 32px);
+      overflow-y: auto; overflow-x: hidden;
+      scrollbar-width: thin;
     }
     .sidebar-section { margin-bottom: 16px; }
     .sidebar-label {
@@ -610,7 +611,16 @@
       background: #ef4444; animation: pulse-dot 1s ease infinite;
     }
 
-    /* Results count */
+    /* HTTP blocked warning */
+    .http-warning {
+      display: none; align-items: center; gap: 8px;
+      padding: 10px 14px; border-radius: var(--radius-sm);
+      background: rgba(234,179,8,0.1); border: 1px solid rgba(234,179,8,0.3);
+      color: #ca8a04; font-size: 0.78rem; margin-bottom: 10px;
+    }
+    [data-theme="dark"] .http-warning { color: #fbbf24; }
+    .http-warning.visible { display: flex; }
+    .http-warning a { color: inherit; text-decoration: underline; }
     .results-bar {
       font-size: 0.78rem; color: var(--text-secondary);
       margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
@@ -627,9 +637,7 @@
 <header>
   <a class="logo" href="#" onclick="showPage('home')">
     <div class="logo-icon">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 3C7.05 3 3 7.05 3 12s4.05 9 9 9 9-4.05 9-9-4.05-9-9-9zm0 2c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7zm0 3a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 110 4 2 2 0 010-4z"/>
-      </svg>
+      <img src="https://raw.githubusercontent.com/liviurhos/radioliveapp/main/icon.png" alt="RadioLive" style="width:34px;height:34px;border-radius:9px;display:block;" />
     </div>
     <span class="logo-text">Radio<span>Live</span></span>
   </a>
@@ -721,6 +729,9 @@
 
     <!-- Station List -->
     <section class="station-area">
+      <div class="http-warning" id="http-warning">
+        ⚠️ This station uses an unencrypted stream (HTTP) which browsers block on HTTPS sites. Try the <a href="https://play.google.com/store" target="_blank">Android</a> or <a href="https://apps.apple.com" target="_blank">iOS</a> app for full playback.
+      </div>
       <div class="results-bar">
         <span id="results-label">Loading stations…</span>
       </div>
@@ -877,9 +888,7 @@
 <div class="player-bar" id="player-bar">
   <div class="player-station">
     <div class="player-logo-placeholder" id="player-logo-wrap">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
-        <path d="M12 3C7.05 3 3 7.05 3 12s4.05 9 9 9 9-4.05 9-9-4.05-9-9-9zm0 2c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7zm0 3a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 110 4 2 2 0 010-4z"/>
-      </svg>
+      <img src="https://raw.githubusercontent.com/liviurhos/radioliveapp/main/icon.png" alt="RadioLive" style="width:44px;height:44px;border-radius:9px;display:block;" />
     </div>
     <div class="player-meta">
       <div class="player-name" id="player-name">RadioLive</div>
@@ -1167,10 +1176,23 @@ function playStation(index) {
 
 function startStream(url) {
   audio.pause();
+  document.getElementById('http-warning').classList.remove('visible');
+  // Check if http stream on https page (will be blocked by browser)
+  if (url.startsWith('http://') && location.protocol === 'https:') {
+    setLoadingState(false);
+    isPlaying = false;
+    updatePlayerUI();
+    renderStations();
+    document.getElementById('http-warning').classList.add('visible');
+    return;
+  }
   setLoadingState(true);
   audio.src = url;
   audio.load();
-  audio.play().then(() => setLoadingState(false)).catch(() => setLoadingState(false));
+  audio.play().then(() => setLoadingState(false)).catch(() => {
+    setLoadingState(false);
+    document.getElementById('http-warning').classList.add('visible');
+  });
 }
 
 function togglePlay() {
@@ -1195,10 +1217,16 @@ function setLoadingState(loading) {
   document.getElementById('loading-dot').style.display = loading ? 'block' : 'none';
 }
 
-audio.addEventListener('playing', () => { setLoadingState(false); isPlaying = true; updatePlayerUI(); renderStations(); });
+audio.addEventListener('playing', () => { 
+  setLoadingState(false); isPlaying = true; updatePlayerUI(); renderStations();
+  document.getElementById('http-warning').classList.remove('visible');
+});
 audio.addEventListener('waiting', () => setLoadingState(true));
 audio.addEventListener('ended',   () => { isPlaying = false; updatePlayerUI(); renderStations(); });
-audio.addEventListener('error',   () => { setLoadingState(false); isPlaying = false; updatePlayerUI(); renderStations(); });
+audio.addEventListener('error',   () => { 
+  setLoadingState(false); isPlaying = false; updatePlayerUI(); renderStations();
+  document.getElementById('http-warning').classList.add('visible');
+});
 
 function updatePlayerUI() {
   const nameEl   = document.getElementById('player-name');
