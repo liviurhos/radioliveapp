@@ -89,73 +89,62 @@
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
     /* ═══════════════════════════════════════════
-       HEADER
+       NAV (matches legal pages style)
     ═══════════════════════════════════════════ */
-    header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    #main-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
       height: var(--header-h);
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 20px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      display: flex; align-items: center;
+      padding: 0 24px;
+      border-bottom: 1px solid transparent;
       transition: background var(--transition), border-color var(--transition);
     }
-    .logo {
+    #main-nav.scrolled {
+      background: var(--surface);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-color: var(--border);
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+    }
+    .nav-logo {
       display: flex; align-items: center; gap: 10px;
-      font-family: var(--font-mono);
-      font-weight: 700; font-size: 1.1rem;
-      letter-spacing: -0.02em;
+      font-family: var(--font-mono); font-weight: 700; font-size: 1rem;
     }
-    .logo-icon {
-      width: 34px; height: 34px;
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
+    .nav-logo-icon { width: 32px; height: 32px; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+    .nav-logo-icon img { width: 32px; height: 32px; display: block; }
     .logo-text span { color: var(--accent); }
-
-    .header-nav { display: flex; align-items: center; gap: 6px; }
-    .nav-link {
-      font-size: 0.875rem; font-weight: 500;
-      padding: 7px 13px; border-radius: var(--radius-sm);
+    .nav-links { list-style: none; display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      font-size: 0.8rem; font-weight: 500;
+      padding: 6px 12px; border-radius: 6px;
       color: var(--text-secondary);
       transition: color var(--transition), background var(--transition);
     }
-    .nav-link:hover, .nav-link.active {
-      color: var(--text-primary);
-      background: var(--surface2);
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text-primary); background: var(--surface2);
     }
-
+    .nav-right { display: flex; align-items: center; gap: 8px; }
     .theme-btn {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--surface2);
+      width: 34px; height: 34px; border-radius: 50%;
       border: 1px solid var(--border);
+      background: var(--surface2);
       display: flex; align-items: center; justify-content: center;
-      transition: all var(--transition);
-      margin-left: 8px;
+      cursor: pointer; transition: border-color var(--transition);
       position: relative; overflow: hidden;
     }
     .theme-btn:hover { border-color: var(--accent); }
-    .theme-btn .icon-sun, .theme-btn .icon-moon {
-      position: absolute; transition: all 0.3s ease;
-    }
-    [data-theme="dark"] .icon-sun { opacity: 1; transform: scale(1); }
+    .icon-sun, .icon-moon { position: absolute; transition: all 0.3s ease; }
+    [data-theme="dark"] .icon-sun  { opacity: 1; transform: scale(1); }
     [data-theme="dark"] .icon-moon { opacity: 0; transform: scale(0.5); }
-    [data-theme="light"] .icon-sun { opacity: 0; transform: scale(0.5); }
+    [data-theme="light"] .icon-sun  { opacity: 0; transform: scale(0.5); }
     [data-theme="light"] .icon-moon { opacity: 1; transform: scale(1); }
-
-    .hamburger {
-      display: none; flex-direction: column; gap: 5px; padding: 6px;
-      width: 36px; height: 36px; justify-content: center; align-items: center;
+    .mob-btn {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
     }
-    .hamburger span {
-      display: block; width: 20px; height: 2px;
-      background: var(--text-primary); border-radius: 2px;
-      transition: all 0.3s;
-    }
+    .mob-btn span { display: block; width: 20px; height: 1.5px; background: var(--text-primary); border-radius: 2px; transition: 0.3s; }
 
     /* ═══════════════════════════════════════════
        LAYOUT
@@ -567,22 +556,25 @@
     /* ═══════════════════════════════════════════
        MOBILE MENU
     ═══════════════════════════════════════════ */
-    .mobile-nav {
-      display: none; position: fixed; top: var(--header-h); left: 0; right: 0;
-      background: var(--surface); border-bottom: 1px solid var(--border);
-      z-index: 99; padding: 12px 20px; flex-direction: column; gap: 4px;
+    .nav-mobile {
+      display: none; position: fixed; inset: 0; z-index: 800;
+      background: var(--bg);
+      flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
     }
-    .mobile-nav.open { display: flex; }
-    .mobile-nav .nav-link {
-      padding: 11px 14px; font-size: 0.9rem; border-radius: var(--radius-sm);
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a {
+      font-family: var(--font-mono); font-size: 0.85rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-secondary); transition: color var(--transition);
     }
+    .nav-mobile a:hover { color: var(--text-primary); }
 
     /* ═══════════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════════ */
     @media (max-width: 800px) {
-      .header-nav .nav-link { display: none; }
-      .hamburger { display: flex; }
+      .nav-links { display: none; }
+      .mob-btn { display: flex; }
       .main-content { grid-template-columns: 1fr; }
       .sidebar { position: relative; top: 0; }
       .country-btn { display: inline-flex; width: auto; }
@@ -629,16 +621,7 @@
     .station-card.http-only { opacity: 0.75; }
     .station-card.http-only:hover { opacity: 1; }
 
-    /* HTTP blocked warning */
-    .http-warning {
-      display: none; align-items: center; gap: 8px;
-      padding: 10px 14px; border-radius: var(--radius-sm);
-      background: rgba(234,179,8,0.1); border: 1px solid rgba(234,179,8,0.3);
-      color: #ca8a04; font-size: 0.78rem; margin-bottom: 10px;
-    }
-    [data-theme="dark"] .http-warning { color: #fbbf24; }
-    .http-warning.visible { display: flex; }
-    .http-warning a { color: inherit; text-decoration: underline; }
+
     .results-bar {
       font-size: 0.78rem; color: var(--text-secondary);
       margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
@@ -680,48 +663,42 @@
 <body>
 
 <!-- HEADER -->
-<header>
-  <a class="logo" href="#" onclick="showPage('home')">
-    <div class="logo-icon">
-      <img src="https://raw.githubusercontent.com/liviurhos/radioliveapp/main/icon.png" alt="RadioLive" style="width:34px;height:34px;border-radius:9px;display:block;" />
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="#" onclick="showPage('home')" class="nav-logo">
+      <div class="nav-logo-icon">
+        <img src="https://raw.githubusercontent.com/liviurhos/radioliveapp/main/icon.png" alt="RadioLive">
+      </div>
+      <span class="logo-text">Radio<span>Live</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" id="nav-home" onclick="showPage('home')" class="active">Player</a></li>
+      <li><a href="#" id="nav-about" onclick="showPage('about')">About</a></li>
+      <li><a href="#" id="nav-faq" onclick="showPage('faq')">FAQ</a></li>
+      <li><a href="#" id="nav-contact" onclick="showPage('contact')">Contact</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="eula.html">EULA</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-btn" onclick="toggleTheme()">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="mob-btn" id="mobBtn" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
     </div>
-    <span class="logo-text">Radio<span>Live</span></span>
-  </a>
-
-  <nav class="header-nav">
-    <a class="nav-link active" id="nav-home" href="#" onclick="showPage('home')">Player</a>
-    <a class="nav-link" id="nav-about" href="#" onclick="showPage('about')">About</a>
-    <a class="nav-link" id="nav-faq" href="#" onclick="showPage('faq')">FAQ</a>
-    <a class="nav-link" id="nav-contact" href="#" onclick="showPage('contact')">Contact</a>
-    <a class="nav-link" href="privacy.html">Privacy</a>
-    <a class="nav-link" href="terms.html">Terms</a>
-    <a class="nav-link" href="eula.html">EULA</a>
-    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">
-      <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-      </svg>
-      <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-      </svg>
-    </button>
-    <button class="hamburger" onclick="toggleMobileNav()" id="hamburger-btn">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-</header>
+  </div>
+</nav>
 
 <!-- MOBILE NAV -->
-<div class="mobile-nav" id="mobile-nav">
-  <a class="nav-link" href="#" onclick="showPage('home'); closeMobileNav()">Player</a>
-  <a class="nav-link" href="#" onclick="showPage('about'); closeMobileNav()">About</a>
-  <a class="nav-link" href="#" onclick="showPage('faq'); closeMobileNav()">FAQ</a>
-  <a class="nav-link" href="#" onclick="showPage('contact'); closeMobileNav()">Contact</a>
-  <a class="nav-link" href="privacy.html" onclick="closeMobileNav()">Privacy</a>
-  <a class="nav-link" href="terms.html" onclick="closeMobileNav()">Terms</a>
-  <a class="nav-link" href="eula.html" onclick="closeMobileNav()">EULA</a>
+<div class="nav-mobile" id="mobile-nav">
+  <a href="#" onclick="showPage('home'); closeMobileNav()">Player</a>
+  <a href="#" onclick="showPage('about'); closeMobileNav()">About</a>
+  <a href="#" onclick="showPage('faq'); closeMobileNav()">FAQ</a>
+  <a href="#" onclick="showPage('contact'); closeMobileNav()">Contact</a>
+  <a href="privacy.html">Privacy</a>
+  <a href="terms.html">Terms</a>
+  <a href="eula.html">EULA</a>
 </div>
 
 <!-- ═══ PAGE: HOME ═══ -->
@@ -781,9 +758,6 @@
 
     <!-- Station List -->
     <section class="station-area">
-      <div class="http-warning" id="http-warning">
-        ⚠️ This station uses an unencrypted stream (HTTP) which browsers block on HTTPS sites. Try the <a href="#" onclick="return false;" target="_blank">Android</a> or <a href="#" onclick="return false;" target="_blank">iOS</a> app for full playback.
-      </div>
       <div class="results-bar">
         <span id="results-label">Loading stations…</span>
       </div>
@@ -1259,6 +1233,17 @@ function showPage(page) {
   if (home) home.style.display = '';
 })();
 
+// Nav scroll behavior
+(function(){
+  const nav = document.getElementById('main-nav');
+  let last = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    nav.classList.toggle('scrolled', y > 40);
+    last = y;
+  }, {passive: true});
+})();
+
 function toggleMobileNav() {
   document.getElementById('mobile-nav').classList.toggle('open');
 }
@@ -1493,15 +1478,13 @@ function playStation(index) {
 
 function startStream(url) {
   audio.pause();
-  document.getElementById('http-warning').classList.remove('visible');
-  // Check if http stream on https page (will be blocked by browser)
+    // Check if http stream on https page (will be blocked by browser)
   if (url.startsWith('http://') && location.protocol === 'https:') {
     setLoadingState(false);
     isPlaying = false;
     updatePlayerUI();
     renderStations();
-    document.getElementById('http-warning').classList.add('visible');
-    return;
+        return;
   }
   setLoadingState(true);
   audio.src = url;
@@ -1509,8 +1492,7 @@ function startStream(url) {
   audio.play().then(() => { setLoadingState(false); startMetaPolling(); }).catch(() => {
     setLoadingState(false);
     stopMetaPolling();
-    document.getElementById('http-warning').classList.add('visible');
-  });
+      });
 }
 
 function togglePlay() {
@@ -1537,15 +1519,13 @@ function setLoadingState(loading) {
 
 audio.addEventListener('playing', () => { 
   setLoadingState(false); isPlaying = true; updatePlayerUI(); renderStations();
-  document.getElementById('http-warning').classList.remove('visible');
-  updateMediaSession();
+    updateMediaSession();
 });
 audio.addEventListener('waiting', () => setLoadingState(true));
 audio.addEventListener('ended',   () => { isPlaying = false; updatePlayerUI(); renderStations(); });
 audio.addEventListener('error',   () => { 
   setLoadingState(false); isPlaying = false; updatePlayerUI(); renderStations();
-  document.getElementById('http-warning').classList.add('visible');
-});
+  });
 
 // ICY metadata via periodic title polling
 let metaInterval = null;
