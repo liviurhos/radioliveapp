@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — RadioLive</title>
+<meta name="description" content="Privacy Policy for RadioLive — Innovation Hub Studio Ltd.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --accent: #4A90D9; --accent2: #2563EB; --accent-glow: rgba(74,144,217,0.2);
+  --ease: cubic-bezier(0.16,1,0.3,1);
+  --font-mono: 'Space Mono', monospace; --font-body: 'DM Sans', sans-serif;
+}
+[data-theme="dark"]  { --bg:#0d1117; --bg-2:#161b22; --bg-3:#1c2433; --line:rgba(74,144,217,0.14); --line-hi:rgba(74,144,217,0.28); --fg:#e6edf3; --fg-2:#8b949e; --fg-3:#4a5568; --nav-bg:rgba(13,17,23,0.92); }
+[data-theme="light"] { --bg:#f0f4f8; --bg-2:#ffffff; --bg-3:#e8eef5; --line:rgba(37,99,235,0.14); --line-hi:rgba(37,99,235,0.25); --fg:#0d1117; --fg-2:#4a5568; --fg-3:#718096; --nav-bg:rgba(240,244,248,0.92); }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--fg);overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background 0.3s,color 0.3s;}
+a{color:inherit;text-decoration:none;}
+nav{position:fixed;top:0;left:0;right:0;z-index:900;height:62px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid transparent;transition:background 0.3s,border-color 0.3s;}
+nav.scrolled{background:var(--nav-bg);backdrop-filter:blur(14px);border-color:var(--line);}
+.nav-inner{max-width:1100px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;gap:2rem;}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-weight:700;font-size:1rem;}
+.nav-logo-icon{width:32px;height:32px;border-radius:8px;overflow:hidden;flex-shrink:0;}
+.nav-logo-icon img{width:32px;height:32px;display:block;}
+.logo-text span{color:var(--accent);}
+.nav-links{list-style:none;display:flex;align-items:center;gap:4px;}
+.nav-links a{font-size:0.8rem;font-weight:500;padding:6px 12px;border-radius:6px;color:var(--fg-2);transition:color 0.2s,background 0.2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--fg);background:var(--bg-3);}
+.theme-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--line-hi);background:var(--bg-3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color 0.2s;position:relative;overflow:hidden;}
+.theme-btn:hover{border-color:var(--accent);}
+.icon-sun,.icon-moon{position:absolute;transition:all 0.3s;}
+[data-theme="dark"] .icon-sun{opacity:1;transform:scale(1);}
+[data-theme="dark"] .icon-moon{opacity:0;transform:scale(0.5);}
+[data-theme="light"] .icon-sun{opacity:0;transform:scale(0.5);}
+[data-theme="light"] .icon-moon{opacity:1;transform:scale(1);}
+.page-header{padding:100px 24px 48px;border-bottom:1px solid var(--line);}
+.page-header-inner{max-width:1100px;margin:0 auto;}
+.page-kicker{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-3);margin-bottom:16px;}
+.page-kicker::before{content:'';display:block;width:18px;height:2px;background:var(--accent);border-radius:1px;}
+.page-title{font-family:var(--font-mono);font-size:clamp(2rem,5vw,4rem);font-weight:700;line-height:1.1;letter-spacing:-0.03em;}
+.page-title .hl{color:var(--accent);}
+.page-meta{margin-top:14px;font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg-3);}
+.content{max-width:860px;margin:0 auto;padding:56px 24px 80px;}
+.policy-block{padding:32px 0;border-bottom:1px solid var(--line);}
+.policy-block:last-child{border-bottom:none;}
+.policy-num{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.policy-block h2{font-family:var(--font-mono);font-size:1rem;font-weight:700;letter-spacing:-0.01em;color:var(--fg);margin-bottom:16px;}
+.policy-block p{font-size:0.9rem;line-height:1.85;color:var(--fg-2);font-weight:300;margin-bottom:12px;}
+.policy-block p:last-child{margin-bottom:0;}
+.policy-block ul{list-style:none;margin:8px 0 12px;}
+.policy-block ul li{font-size:0.9rem;line-height:1.85;color:var(--fg-2);font-weight:300;padding:4px 0;display:flex;align-items:flex-start;gap:12px;}
+.policy-block ul li::before{content:'—';color:var(--accent);flex-shrink:0;font-family:var(--font-mono);font-size:0.75rem;margin-top:2px;}
+.policy-block strong{color:var(--fg);font-weight:600;}
+.policy-block a{color:var(--accent);border-bottom:1px solid transparent;transition:border-color 0.2s;}
+.policy-block a:hover{border-color:var(--accent);}
+.contact-box{margin-top:48px;padding:32px;border:1px solid var(--line-hi);border-radius:12px;background:var(--bg-2);}
+.contact-box-label{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.contact-box h2{font-family:var(--font-mono);font-size:1.3rem;font-weight:700;color:var(--fg);margin-bottom:12px;}
+.contact-box p{font-size:0.9rem;line-height:1.85;color:var(--fg-2);font-weight:300;}
+.contact-box a{color:var(--accent);}
+footer{padding:24px;border-top:1px solid var(--line);}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.footer-brand{font-family:var(--font-mono);font-size:0.7rem;font-weight:600;text-transform:uppercase;color:var(--fg-2);}
+.footer-links{list-style:none;display:flex;gap:20px;}
+.footer-links a{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg-3);transition:color 0.2s;}
+.footer-links a:hover{color:var(--fg);}
+.footer-copy{font-family:var(--font-mono);font-size:0.62rem;color:var(--fg-3);}
+.r{opacity:0;transform:translateY(14px);transition:opacity 0.6s var(--ease),transform 0.6s var(--ease);}
+.r.on{opacity:1;transform:none;}
+.r-d1{transition-delay:0.07s;}
+@media(max-width:640px){.nav-links{display:none;}.footer-inner{flex-direction:column;gap:14px;text-align:center;}.footer-links{justify-content:center;}}
+</style>
+
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon"><img src="https://raw.githubusercontent.com/liviurhos/radioliveapp/main/icon.png" alt="RadioLive"></div>
+      <span class="logo-text">Radio<span>Live</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Player</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+      <li><a href="privacy.html"class="active">Privacy</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="eula.html">EULA</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <button class="theme-btn" onclick="toggleTheme()">
+      <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</nav>
+
+<main>
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="page-kicker">Legal</div>
+    <h1 class="page-title">Privacy <span class="hl">Policy</span></h1>
+    <p class="page-meta">Effective date — 1 January 2025 &nbsp;·&nbsp; Last updated — May 2026</p>
+  </div>
+</header>
+<div class="content">
+
+  <div class="policy-block r">
+    <div class="policy-num">01</div>
+    <h2>Who We Are</h2>
+    <p><strong>Innovation Hub Studio Ltd</strong> ("we", "us", "our") is a company registered in England and Wales. We are the data controller for personal data collected through the RadioLive application and website.</p>
+    <p>Contact: <a href="mailto:contact@innovationhubstudio.co.uk">contact@innovationhubstudio.co.uk</a></p>
+    <p>This Privacy Policy applies to the <strong>RadioLive</strong> mobile application (Google Play and Apple App Store) and the web player at <strong>radioliveapp.co.uk</strong>.</p>
+  </div>
+  <div class="policy-block r r-d1">
+    <div class="policy-num">02</div>
+    <h2>What Data We Collect and Why</h2>
+    <p>We collect only the minimum data necessary to operate the service. The categories and their legal bases under UK GDPR:</p>
+    <ul>
+      <li><strong>Device identifiers and usage data</strong> — to diagnose crashes and improve the App. Legal basis: Legitimate interests (Article 6(1)(f) UK GDPR).</li>
+      <li><strong>Advertising identifiers (GAID / IDFA)</strong> — used by Google AdMob on the free mobile tier with your consent. Legal basis: Consent (Article 6(1)(a) UK GDPR). Withdraw anytime via device settings.</li>
+      <li><strong>Purchase transaction records</strong> — confirmation only; full payment data handled exclusively by Google Play or Apple. Legal basis: Performance of a contract (Article 6(1)(b) UK GDPR).</li>
+      <li><strong>Network information</strong> — used only to optimise stream quality; not stored beyond the session. Legal basis: Legitimate interests (Article 6(1)(f) UK GDPR).</li>
+    </ul>
+    <p>The <strong>web player</strong> collects no personal data whatsoever — no cookies, no analytics, no tracking.</p>
+    <p>We do not collect names, email addresses, or any other directly identifying information through the App itself.</p>
+  </div>
+  <div class="policy-block r">
+    <div class="policy-num">03</div>
+    <h2>Google AdMob and Advertising</h2>
+    <p>The free tier of the RadioLive mobile app is supported by advertising via <strong>Google AdMob</strong>. On first launch, the App presents a consent dialogue per the IAB TCF framework. You may choose personalised or non-personalised ads, or withdraw consent anytime in App settings.</p>
+    <p>To opt out on Android: <strong>Settings → Privacy → Ads</strong>. On iOS: <strong>Settings → Privacy & Security → Apple Advertising</strong>.</p>
+    <p>Google's privacy policy: <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></p>
+  </div>
+  <div class="policy-block r r-d1">
+    <div class="policy-num">04</div>
+    <h2>In-App Purchases</h2>
+    <ul>
+      <li><strong>Free</strong> — supported by advertising; no charge.</li>
+      <li><strong>Monthly (£0.49/month)</strong> — removes ads; billed via Google Play or App Store.</li>
+      <li><strong>Lifetime (£4.99 one-time)</strong> — removes ads permanently.</li>
+    </ul>
+    <p>All payment processing is handled by Google Play or Apple App Store. We do not receive or store your payment card details. Purchase records are retained for 6 years per UK HMRC requirements.</p>
+  </div>
+  <div class="policy-block r">
+    <div class="policy-num">05</div>
+    <h2>Third-Party Services</h2>
+    <ul>
+      <li><strong>Google AdMob</strong> — advertising (free mobile tier only).</li>
+      <li><strong>Google Play Billing / Apple StoreKit</strong> — payment processing.</li>
+      <li><strong>Formspree</strong> — contact form submissions on the website.</li>
+    </ul>
+    <p>We do not sell, rent, or share your personal data with any third party for their own marketing purposes.</p>
+  </div>
+  <div class="policy-block r r-d1">
+    <div class="policy-num">06</div>
+    <h2>Data Retention</h2>
+    <ul>
+      <li><strong>Crash and diagnostic data</strong> — up to 90 days, then deleted.</li>
+      <li><strong>Advertising identifiers</strong> — per Google AdMob retention policies.</li>
+      <li><strong>Purchase records</strong> — 6 years (UK HMRC requirement).</li>
+      <li><strong>Contact form messages</strong> — retained only until your enquiry is resolved.</li>
+    </ul>
+  </div>
+  <div class="policy-block r">
+    <div class="policy-num">07</div>
+    <h2>International Transfers</h2>
+    <p>Your data may be processed outside the UK (including the US) by Google LLC. Transfers are protected by Standard Contractual Clauses approved by the UK ICO or adequacy decisions.</p>
+  </div>
+  <div class="policy-block r r-d1">
+    <div class="policy-num">08</div>
+    <h2>Children's Privacy</h2>
+    <p>RadioLive is not directed to children under 13. We do not knowingly collect data from children under 13. Contact us at <a href="mailto:contact@innovationhubstudio.co.uk">contact@innovationhubstudio.co.uk</a> if you believe this has occurred.</p>
+  </div>
+  <div class="policy-block r">
+    <div class="policy-num">09</div>
+    <h2>Your Rights Under UK GDPR</h2>
+    <ul>
+      <li><strong>Right of access</strong> — obtain a copy of personal data we hold.</li>
+      <li><strong>Right to rectification</strong> — correct inaccurate data.</li>
+      <li><strong>Right to erasure</strong> — request deletion where no longer necessary.</li>
+      <li><strong>Right to restriction</strong> — restrict processing in certain circumstances.</li>
+      <li><strong>Right to object</strong> — object to processing based on legitimate interests.</li>
+      <li><strong>Right to withdraw consent</strong> — at any time, without affecting prior processing.</li>
+      <li><strong>Right to complain</strong> — to the ICO at ico.org.uk / 0303 123 1113.</li>
+    </ul>
+    <p>To exercise any right, contact us at <a href="mailto:contact@innovationhubstudio.co.uk">contact@innovationhubstudio.co.uk</a>. We respond within 30 days.</p>
+  </div>
+  <div class="policy-block r r-d1">
+    <div class="policy-num">10</div>
+    <h2>Security</h2>
+    <p>We implement appropriate technical and organisational measures to protect personal data. No internet transmission is completely secure; we cannot guarantee absolute security and accept no liability for breaches outside our reasonable control.</p>
+  </div>
+  <div class="policy-block r">
+    <div class="policy-num">11</div>
+    <h2>Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. Material changes will be notified by updating the "Last updated" date. Continued use constitutes acceptance.</p>
+  </div>
+  <div class="contact-box r">
+    <div class="contact-box-label">Data Controller</div>
+    <h2>Innovation Hub Studio Ltd</h2>
+    <p>United Kingdom</p>
+    <p style="margin-top:12px;">Email: <a href="mailto:contact@innovationhubstudio.co.uk">contact@innovationhubstudio.co.uk</a></p>
+    <p style="margin-top:12px;"><strong>Information Commissioner's Office (ICO)</strong><br>
+    Wycliffe House, Water Lane, Wilmslow, Cheshire SK9 5AF<br>
+    <a href="https://ico.org.uk" target="_blank">ico.org.uk</a> &nbsp;·&nbsp; 0303 123 1113</p>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-brand">RadioLive · Innovation Hub Studio Ltd</span>
+    <ul class="footer-links">
+      <li><a href="index.html">Player</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="eula.html">EULA</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <span class="footer-copy">&copy; 2025 Innovation Hub Studio Ltd.</span>
+  </div>
+</footer>
+
+
+<script>
+(function(){const s=localStorage.getItem('rl-theme')||'dark';document.documentElement.setAttribute('data-theme',s);})();
+function toggleTheme(){const h=document.documentElement,n=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('rl-theme',n);}
+(function(){const nav=document.getElementById('nav');let last=0;window.addEventListener('scroll',()=>{const y=window.scrollY;nav.classList.toggle('scrolled',y>40);last=y;},{passive:true});})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}}),{threshold:0.1});
+document.querySelectorAll('.r').forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
