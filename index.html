@@ -617,6 +617,19 @@
       background: #ef4444; animation: pulse-dot 1s ease infinite;
     }
 
+    /* App-only badge for HTTP streams */
+    .app-only-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.62rem; font-weight: 600; letter-spacing: 0.04em;
+      padding: 2px 7px; border-radius: 99px;
+      background: rgba(234,179,8,0.12); color: #ca8a04;
+      border: 1px solid rgba(234,179,8,0.3); white-space: nowrap;
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .app-only-badge { color: #fbbf24; }
+    .station-card.http-only { opacity: 0.75; }
+    .station-card.http-only:hover { opacity: 1; }
+
     /* HTTP blocked warning */
     .http-warning {
       display: none; align-items: center; gap: 8px;
@@ -633,8 +646,36 @@
     }
     .results-bar strong { color: var(--text-primary); }
 
-    /* Page #home section */
-    #page-home { display: block; }
+    /* FAQ */
+    .faq-group { margin-bottom: 32px; }
+    .faq-label {
+      font-family: var(--font-mono); font-size: 0.72rem;
+      color: var(--accent); letter-spacing: 0.08em;
+      margin-bottom: 10px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      width: 100%; text-align: left;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 4px; font-size: 0.9rem; font-weight: 600;
+      color: var(--text-primary); transition: color var(--transition);
+      background: none; border: none; cursor: pointer;
+    }
+    .faq-q:hover { color: var(--accent); }
+    .faq-q svg { flex-shrink: 0; transition: transform 0.25s ease; color: var(--text-secondary); }
+    .faq-q.open svg { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.25s ease;
+      padding: 0 4px;
+    }
+    .faq-a.open { max-height: 400px; padding: 0 4px 14px; }
+    .faq-a p { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 8px; }
+    .faq-a p:last-child { margin-bottom: 0; }
+
+    /* Footer links */
+    footer a + a::before { content: ' · '; }
   </style>
 </head>
 <body>
@@ -651,8 +692,9 @@
   <nav class="header-nav">
     <a class="nav-link active" id="nav-home" href="#" onclick="showPage('home')">Player</a>
     <a class="nav-link" id="nav-about" href="#" onclick="showPage('about')">About</a>
-    <a class="nav-link" id="nav-privacy" href="#" onclick="showPage('privacy')">Privacy</a>
+    <a class="nav-link" id="nav-faq" href="#" onclick="showPage('faq')">FAQ</a>
     <a class="nav-link" id="nav-contact" href="#" onclick="showPage('contact')">Contact</a>
+    <a class="nav-link" id="nav-legal" href="privacy.html">Legal</a>
     <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">
       <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -674,8 +716,9 @@
 <div class="mobile-nav" id="mobile-nav">
   <a class="nav-link" href="#" onclick="showPage('home'); closeMobileNav()">🎵 Player</a>
   <a class="nav-link" href="#" onclick="showPage('about'); closeMobileNav()">ℹ️ About</a>
-  <a class="nav-link" href="#" onclick="showPage('privacy'); closeMobileNav()">🔒 Privacy</a>
+  <a class="nav-link" href="#" onclick="showPage('faq'); closeMobileNav()">❓ FAQ</a>
   <a class="nav-link" href="#" onclick="showPage('contact'); closeMobileNav()">✉️ Contact</a>
+  <a class="nav-link" href="privacy.html" onclick="closeMobileNav()">⚖️ Legal</a>
 </div>
 
 <!-- ═══ PAGE: HOME ═══ -->
@@ -754,7 +797,7 @@
 
   <footer>
     &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a> · 
-    <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
+    <a href="#" href="privacy.html">Privacy Policy</a>
   </footer>
 </div>
 
@@ -800,47 +843,261 @@
   </div>
   <footer>
     &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a> · 
-    <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
+    <a href="#" href="privacy.html">Privacy Policy</a>
   </footer>
 </div>
 
-<!-- ═══ PAGE: PRIVACY ═══ -->
-<div class="app-layout page-section" id="page-privacy">
+<!-- ═══ PAGE: FAQ ═══ -->
+<div class="app-layout page-section" id="page-faq">
   <div class="page-content fade-in">
-    <h1>Privacy <span style="color:var(--accent)">Policy</span></h1>
-    <p class="page-intro">Last updated: January 2025. RadioLive is designed with privacy at its core.</p>
+    <h1>Frequently Asked <span style="color:var(--accent)">Questions</span></h1>
+    <p class="page-intro">Everything you need to know about RadioLive — web, Android, and iOS.</p>
 
-    <div class="policy-block">
-      <h3>Data We Collect <span class="pill">Minimal</span></h3>
-      <p>RadioLive does not collect any personally identifiable information. The app and website do not require registration or login. We do not store your listening history on our servers.</p>
+    <div class="faq-group">
+      <div class="faq-label">// General</div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>What is RadioLive?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>RadioLive is a free radio streaming app that lets you listen to hundreds of live radio stations from Romania, Germany, UK, USA, and 20+ other countries. It's available as a native app on Android and iOS, and as a web player at radioliveapp.co.uk. No account, no subscription required to start listening.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Is RadioLive really free?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Yes. The web player is completely free with no ads. The mobile app is free with optional ads. We also offer a Premium tier (£0.49/month or £4.99 lifetime) on mobile that removes all ads. The core streaming experience — all stations, all countries — is always free.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Do I need to create an account?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>No account is required. Open the app or website and press play. Your preferences (theme, volume, favourites) are stored locally on your device only.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>How many stations are available?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Currently 350+ stations across 25 countries including Romania, Germany, UK, USA, France, Italy, Spain, Greece, Turkey, and more. We continuously add new stations — suggest one via the Contact page!</p>
+        </div>
+      </div>
     </div>
-    <div class="policy-block">
-      <h3>Local Storage <span class="pill">On-device only</span></h3>
-      <p>Preferences such as theme (dark/light), volume, and favourite stations are stored locally on your device or browser. This data never leaves your device and is not accessible to us.</p>
+
+    <div class="faq-group">
+      <div class="faq-label">// Web Player</div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Why doesn't some stations play in the browser?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Some radio stations broadcast on unencrypted <strong>HTTP</strong> streams. Modern browsers block these when the page is served over HTTPS — this is a browser security policy, not a RadioLive limitation. These stations are marked with a <strong>📱 App only</strong> badge. They play perfectly in the Android and iOS apps, which don't have this restriction.</p>
+          <p>Other stations may also block direct browser access (CORS policy). Again, the mobile apps bypass this entirely.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>The player is buffering a lot — what can I do?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Buffering is usually caused by your internet connection or the radio station's server load. Try: refreshing the page, switching to a lower-bitrate station of the same broadcaster, or using the mobile app which uses ExoPlayer/AVPlayer for optimised adaptive buffering.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Why can't I see the artist / track name?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Track metadata (ICY metadata) embedded in radio streams is not accessible to web browsers due to cross-origin restrictions. The mobile apps can read this data directly. On the web player, your OS media controls will show the station name and logo via the MediaSession API, but not the individual track title.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Which browsers are supported?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>RadioLive works on all modern browsers: Chrome, Firefox, Safari, Edge, and Opera. We recommend Chrome or Edge for the best experience. Internet Explorer is not supported.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Can I control playback from my keyboard or OS media controls?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Yes. Once a station is playing, your keyboard's media keys (play/pause) and your OS media controls (Windows taskbar, macOS Control Centre, lock screen on mobile) all work with the web player via the MediaSession API.</p>
+        </div>
+      </div>
     </div>
-    <div class="policy-block">
-      <h3>Third-Party Streams <span class="pill">External</span></h3>
-      <p>When you play a station, your device connects directly to the radio station's streaming server. That connection is subject to the privacy policy of the respective broadcaster — RadioLive has no involvement in or access to that data.</p>
+
+    <div class="faq-group">
+      <div class="faq-label">// Mobile App</div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Where can I download the app?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>RadioLive is available on the <strong>Google Play Store</strong> (Android) and the <strong>Apple App Store</strong> (iOS). Search for "RadioLive" or use the download links on the main page.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Does the app play in the background / when the screen is locked?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Yes. The mobile app runs as a foreground service (Android) or background audio session (iOS), meaning it keeps playing when you lock your screen or switch apps. Lock screen controls (play, pause, station info) are fully supported on both platforms.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Can I use Bluetooth headphones or car audio?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Yes, fully. RadioLive integrates with the system audio stack on both Android and iOS, so it works with any Bluetooth device, wired headphones, car audio via Android Auto, and AirPlay on iOS.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>How do I save favourite stations?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Tap the heart/star icon on any station to add it to your favourites. Access your favourites list from the Favourites tab in the app. Favourites are stored locally on your device.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>The app shows a station but it won't play — why?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Occasionally a radio station goes offline, changes their stream URL, or experiences technical issues on their end. This is outside our control. Try: waiting a few minutes and retrying, checking if the station's own website is working, or reporting it to us via the Contact page so we can update the database.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>How much mobile data does RadioLive use?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Data usage depends on the station's bitrate. As a guide: a 64 kbps stream uses ~28 MB/hour; a 128 kbps stream uses ~56 MB/hour; a 320 kbps stream uses ~144 MB/hour. Most stations stream between 64–192 kbps.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Does RadioLive work offline?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>No — RadioLive streams live radio in real time and requires an internet connection (WiFi or mobile data). There is no offline/download feature, as radio content is live by nature.</p>
+        </div>
+      </div>
     </div>
-    <div class="policy-block">
-      <h3>Analytics <span class="pill">None</span></h3>
-      <p>We do not use Google Analytics, Facebook Pixel, or any other tracking scripts. The website uses no cookies beyond those strictly necessary for theme persistence (stored in localStorage).</p>
+
+    <div class="faq-group">
+      <div class="faq-label">// Stations & Content</div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Can I suggest a new radio station?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Absolutely! Use the <a href="#" onclick="showPage('contact')" style="color:var(--accent)">Contact form</a> and select "Station Suggestion". Include the station name, country, and stream URL if you have it. We review and add stations regularly.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>A station has wrong info / broken stream — how do I report it?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Use the <a href="#" onclick="showPage('contact')" style="color:var(--accent)">Contact form</a>, select "Bug Report", and mention the station name and country. We aim to fix reported issues within 48 hours.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Will more countries be added?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Yes, we're expanding continuously. Countries in progress include France, Italy, Spain, Poland, and more. If your country isn't listed, suggest it via the Contact page.</p>
+        </div>
+      </div>
     </div>
-    <div class="policy-block">
-      <h3>Contact Form</h3>
-      <p>If you use the contact form, your name, email, and message are submitted via Formspree and forwarded to our team email. We use this data solely to respond to your enquiry and do not share it with third parties.</p>
+
+    <div class="faq-group">
+      <div class="faq-label">// Privacy & Legal</div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>What data does RadioLive collect?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>The web player collects nothing — no cookies, no analytics, no tracking. The mobile app collects minimal device data for crash diagnostics and, on the free tier, uses Google AdMob for advertising (with your consent). See our full <a href="privacy.html" style="color:var(--accent)">Privacy Policy</a>.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Who is behind RadioLive?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>RadioLive is developed and maintained by <strong>Innovation Hub Studio Ltd</strong>, a software company registered in England and Wales. Visit <a href="https://innovationhubstudio.co.uk" target="_blank" style="color:var(--accent)">innovationhubstudio.co.uk</a> to learn more.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Where can I find the Terms, EULA, and Privacy Policy?</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>All legal documents are available at: <a href="privacy.html" style="color:var(--accent)">Privacy Policy</a> · <a href="terms.html" style="color:var(--accent)">Terms & Conditions</a> · <a href="eula.html" style="color:var(--accent)">EULA</a>.</p>
+        </div>
+      </div>
     </div>
-    <div class="policy-block">
-      <h3>Children</h3>
-      <p>RadioLive is suitable for all ages. We do not knowingly collect data from children under 13.</p>
-    </div>
-    <div class="policy-block">
-      <h3>Contact</h3>
-      <p>Questions about this policy? Email us at <a href="mailto:contact@innovationhubstudio.co.uk" style="color:var(--accent)">contact@innovationhubstudio.co.uk</a> or use the <a href="#" onclick="showPage('contact')" style="color:var(--accent)">contact form</a>.</p>
-    </div>
+
   </div>
   <footer>
-    &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a>
+    &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a> ·
+    <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="eula.html">EULA</a>
   </footer>
 </div>
 
@@ -936,6 +1193,20 @@ function toggleTheme() {
   const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', next);
   localStorage.setItem('rl-theme', next);
+}
+
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  // close all
+  document.querySelectorAll('.faq-q.open').forEach(b => {
+    b.classList.remove('open');
+    b.nextElementSibling.classList.remove('open');
+  });
+  if (!isOpen) {
+    btn.classList.add('open');
+    answer.classList.add('open');
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -1134,7 +1405,7 @@ function renderStations() {
         + `<div class="station-logo-placeholder" style="display:none">${abbr}</div>`
       : `<div class="station-logo-placeholder">${abbr}</div>`;
 
-    return `<div class="station-card${isNowPlaying ? ' playing' : ''} fade-in" 
+    return `<div class="station-card${isNowPlaying ? ' playing' : ''} ${isHttpBlocked(s.streamURL) ? 'http-only' : ''} fade-in" 
                style="animation-delay:${Math.min(i * 30, 300)}ms"
                onclick="playStation(${i})">
       ${logoHtml}
@@ -1144,7 +1415,7 @@ function renderStations() {
       </div>
       <div class="station-right">
         <div class="visualizer">${isNowPlaying ? '<span></span><span></span><span></span><span></span><span></span>' : ''}</div>
-        ${s._codec ? `<span class="station-codec">${escHtml(s._codec)}</span>` : ''}
+        ${isHttpBlocked(s.streamURL) ? '<span class="app-only-badge">📱 App only</span>' : (s._codec ? `<span class="station-codec">${escHtml(s._codec)}</span>` : '')}
         <button class="play-btn" onclick="event.stopPropagation();playStation(${i})">
           ${isNowPlaying
             ? `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
@@ -1176,6 +1447,10 @@ function renderCountryBtns() {
 /* ═══════════════════════════════════════════
    PLAYER
 ═══════════════════════════════════════════ */
+function isHttpBlocked(url) {
+  return url && url.startsWith('http://') && location.protocol === 'https:';
+}
+
 function playStation(index) {
   const s = filteredStations[index];
   if (!s) return;
