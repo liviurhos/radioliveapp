@@ -608,18 +608,7 @@
       background: #ef4444; animation: pulse-dot 1s ease infinite;
     }
 
-    /* App-only badge for HTTP streams */
-    .app-only-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 0.62rem; font-weight: 600; letter-spacing: 0.04em;
-      padding: 2px 7px; border-radius: 99px;
-      background: rgba(234,179,8,0.12); color: #ca8a04;
-      border: 1px solid rgba(234,179,8,0.3); white-space: nowrap;
-      flex-shrink: 0;
-    }
-    [data-theme="dark"] .app-only-badge { color: #fbbf24; }
-    .station-card.http-only { opacity: 0.75; }
-    .station-card.http-only:hover { opacity: 1; }
+
 
 
     .results-bar {
@@ -710,7 +699,7 @@
       <h1>Stream Radio<br><span class="hl">Worldwide</span></h1>
       <p>Hundreds of stations from Romania, Germany, USA, UK and more. No account, no ads, just music.</p>
       <div class="hero-stats">
-        <div class="stat"><div class="stat-num" id="stat-stations">2500+</div><div class="stat-label">Stations</div></div>
+        <div class="stat"><div class="stat-num" id="stat-stations">352</div><div class="stat-label">Stations</div></div>
         <div class="stat"><div class="stat-num" id="stat-countries">25</div><div class="stat-label">Countries</div></div>
         <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Live</div></div>
       </div>
@@ -1289,6 +1278,7 @@ const COUNTRIES_CONFIG = [
 ];
 
 const BASE_URL = 'https://raw.githubusercontent.com/liviurhos/radio-stations/main/';
+const PROXY_URL = 'https://proxy.radioliveapp.co.uk/stream?url=';
 let allStations = [];
 let filteredStations = [];
 let currentCountry = 'RO';
@@ -1413,7 +1403,7 @@ function renderStations() {
         + `<div class="station-logo-placeholder" style="display:none">${abbr}</div>`
       : `<div class="station-logo-placeholder">${abbr}</div>`;
 
-    return `<div class="station-card${isNowPlaying ? ' playing' : ''} ${isHttpBlocked(s.streamURL) ? 'http-only' : ''} fade-in" 
+    return `<div class="station-card${isNowPlaying ? ' playing' : ''} fade-in" 
                style="animation-delay:${Math.min(i * 30, 300)}ms"
                onclick="playStation(${i})">
       ${logoHtml}
@@ -1423,7 +1413,7 @@ function renderStations() {
       </div>
       <div class="station-right">
         <div class="visualizer">${isNowPlaying ? '<span></span><span></span><span></span><span></span><span></span>' : ''}</div>
-        ${isHttpBlocked(s.streamURL) ? '<span class="app-only-badge">📱 App only</span>' : (s._codec ? `<span class="station-codec">${escHtml(s._codec)}</span>` : '')}
+        ${s._codec ? `<span class="station-codec">${escHtml(s._codec)}</span>` : ''}
         <button class="play-btn" onclick="event.stopPropagation();playStation(${i})">
           ${isNowPlaying
             ? `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
@@ -1456,7 +1446,7 @@ function renderCountryBtns() {
    PLAYER
 ═══════════════════════════════════════════ */
 function isHttpBlocked(url) {
-  return url && url.startsWith('http://') && location.protocol === 'https:';
+  return false; // HTTP streams are proxied via proxy.radioliveapp.co.uk
 }
 
 function playStation(index) {
@@ -1478,21 +1468,17 @@ function playStation(index) {
 
 function startStream(url) {
   audio.pause();
-    // Check if http stream on https page (will be blocked by browser)
-  if (url.startsWith('http://') && location.protocol === 'https:') {
-    setLoadingState(false);
-    isPlaying = false;
-    updatePlayerUI();
-    renderStations();
-        return;
-  }
+  stopMetaPolling();
+  // Route http:// streams through HTTPS proxy
+  const streamUrl = (url && url.startsWith('http://') && location.protocol === 'https:')
+    ? PROXY_URL + encodeURIComponent(url)
+    : url;
   setLoadingState(true);
-  audio.src = url;
+  audio.src = streamUrl;
   audio.load();
-  audio.play().then(() => { setLoadingState(false); startMetaPolling(); }).catch(() => {
-    setLoadingState(false);
-    stopMetaPolling();
-      });
+  audio.play()
+    .then(() => { setLoadingState(false); startMetaPolling(); })
+    .catch(() => { setLoadingState(false); });
 }
 
 function togglePlay() {
