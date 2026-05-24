@@ -162,32 +162,33 @@
     .hero {
       padding: 48px 20px 32px;
       max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 32px;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 0;
     }
+    .hero-text { display: flex; flex-direction: column; align-items: center; }
     .hero-text h1 {
       font-family: var(--font-mono);
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 700; line-height: 1.2;
-      margin-bottom: 10px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700; line-height: 1.15;
+      margin-bottom: 14px;
     }
     .hero-text h1 .hl { color: var(--accent); }
     .hero-text p {
-      font-size: 0.95rem; color: var(--text-secondary);
-      max-width: 400px; line-height: 1.6;
+      font-size: 1rem; color: var(--text-secondary);
+      max-width: 500px; line-height: 1.65;
     }
     .hero-stats {
-      display: flex; gap: 28px; margin-top: 20px;
+      display: flex; gap: 40px; margin-top: 24px; justify-content: center;
     }
     .stat { text-align: center; }
     .stat-num {
       font-family: var(--font-mono);
-      font-size: 1.4rem; font-weight: 700;
+      font-size: 1.6rem; font-weight: 700;
       color: var(--accent);
     }
     .stat-label { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
 
-    .app-badges { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    .app-badges { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; justify-content: center; }
     .badge {
       display: flex; align-items: center; gap: 7px;
       padding: 8px 16px; border-radius: 30px;
@@ -583,8 +584,8 @@
       .sidebar-section .countries-list {
         display: flex; flex-wrap: wrap; gap: 6px;
       }
-      .hero { flex-direction: column; padding: 28px 20px 20px; }
-      .hero-text h1 { font-size: 1.4rem; }
+      .hero { padding: 28px 20px 20px; }
+      .hero-text h1 { font-size: 1.5rem; }
       .volume-wrap { display: none; }
       .player-name { max-width: 130px; }
       .station-grid { grid-template-columns: 1fr; }
@@ -701,18 +702,22 @@
       <h1>Stream Radio<br><span class="hl">Worldwide</span></h1>
       <p>Hundreds of stations from Romania, Germany, USA, UK and more. No account, no ads, just music.</p>
       <div class="hero-stats">
-        <div class="stat"><div class="stat-num" id="stat-stations">352</div><div class="stat-label">Stations</div></div>
+        <div class="stat"><div class="stat-num" id="stat-stations">2000+</div><div class="stat-label">Stations</div></div>
         <div class="stat"><div class="stat-num" id="stat-countries">25</div><div class="stat-label">Countries</div></div>
         <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Live</div></div>
       </div>
       <div class="app-badges">
-        <a class="badge" href="#" onclick="return false;" target="_blank">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.38.21.82.22 1.22.01l11.29-6.38-2.5-2.5-10.01 8.87zm15.6-13.33L5.63 3.06c-.38-.21-.82-.21-1.21.01l10.87 9.65 3.49-2.29zm1.06 1.92l-3.66 2.4 3.66 2.4c.6-.36.96-.98.96-1.7s-.36-1.34-.96-1.7zM4.4.24C4.02.02 3.57.03 3.18.24L14.1 10l2.5-2.5L4.4.24z"/></svg>
-          Android App
+        <a class="badge" href="#" onclick="return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.523 15.341 14.63 9.845a.48.48 0 0 0-.848 0l-.716 1.35a5.25 5.25 0 0 1 2.264 4.342c0 .284-.023.563-.067.835h1.957c.616 0 .985-.68.664-1.204l-.361-.827zm-11.046 0-.361.827c-.321.524.048 1.204.664 1.204h1.957a5.32 5.32 0 0 1-.067-.835 5.25 5.25 0 0 1 2.264-4.342l-.716-1.35a.48.48 0 0 0-.848 0l-2.893 5.496zM12 11.197a3.746 3.746 0 1 0 0 7.491 3.746 3.746 0 0 0 0-7.491zM8.668 7.01l-.88-1.664a.24.24 0 0 0-.427 0l-.443.836a.24.24 0 0 0 .088.316l1.662.99V7.01zm6.664 0v-.522l1.662-.99a.24.24 0 0 0 .088-.316l-.443-.836a.24.24 0 0 0-.427 0l-.88 1.664z"/>
+          </svg>
+          Google Play
         </a>
-        <a class="badge" href="#" onclick="return false;" target="_blank">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          iOS App
+        <a class="badge" href="#" onclick="return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          App Store
         </a>
         <span class="live-badge"><span class="dot"></span>Live</span>
       </div>
@@ -817,12 +822,12 @@
 
     <h2>// Get the App</h2>
     <div class="app-badges" style="margin-top:14px">
-      <a class="badge" href="#" onclick="return false;" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.38.21.82.22 1.22.01l11.29-6.38-2.5-2.5-10.01 8.87zm15.6-13.33L5.63 3.06c-.38-.21-.82-.21-1.21.01l10.87 9.65 3.49-2.29zm1.06 1.92l-3.66 2.4 3.66 2.4c.6-.36.96-.98.96-1.7s-.36-1.34-.96-1.7zM4.4.24C4.02.02 3.57.03 3.18.24L14.1 10l2.5-2.5L4.4.24z"/></svg>
+      <a class="badge" href="#" onclick="return false;">
+        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.341 14.63 9.845a.48.48 0 0 0-.848 0l-.716 1.35a5.25 5.25 0 0 1 2.264 4.342c0 .284-.023.563-.067.835h1.957c.616 0 .985-.68.664-1.204l-.361-.827zm-11.046 0-.361.827c-.321.524.048 1.204.664 1.204h1.957a5.32 5.32 0 0 1-.067-.835 5.25 5.25 0 0 1 2.264-4.342l-.716-1.35a.48.48 0 0 0-.848 0l-2.893 5.496zM12 11.197a3.746 3.746 0 1 0 0 7.491 3.746 3.746 0 0 0 0-7.491zM8.668 7.01l-.88-1.664a.24.24 0 0 0-.427 0l-.443.836a.24.24 0 0 0 .088.316l1.662.99V7.01zm6.664 0v-.522l1.662-.99a.24.24 0 0 0 .088-.316l-.443-.836a.24.24 0 0 0-.427 0l-.88 1.664z"/></svg>
         Google Play
       </a>
-      <a class="badge" href="#" onclick="return false;" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      <a class="badge" href="#" onclick="return false;">
+        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         App Store
       </a>
     </div>
@@ -1328,6 +1333,9 @@ async function loadStations(countryCode) {
     renderCountryBtns();
     extractGenres();
     applyFilters();
+    // Update station count across all countries (approximate)
+    const el = document.getElementById('stat-stations');
+    if (el) el.textContent = allStations.length > 0 ? allStations.length + '+' : '2000+';
   } catch(e) {
     document.getElementById('station-grid').innerHTML = `
       <div class="empty-state">
