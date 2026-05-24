@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RadioLive – Stream Radio Worldwide</title>
+  <meta name="description" content="RadioLive – Listen to hundreds of radio stations from Romania, Germany, USA, UK and more. Free, no account needed." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════════════ */
+    :root {
+      --accent: #4A90D9;
+      --accent2: #2563EB;
+      --accent-glow: rgba(74,144,217,0.25);
+
+      /* dark */
+      --bg-dark: #0d1117;
+      --surface-dark: #161b22;
+      --surface2-dark: #1c2433;
+      --border-dark: rgba(74,144,217,0.18);
+      --text-primary-dark: #e6edf3;
+      --text-secondary-dark: #8b949e;
+      --gradient-dark: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+
+      /* light */
+      --bg-light: #f0f4f8;
+      --surface-light: #ffffff;
+      --surface2-light: #e8eef5;
+      --border-light: rgba(37,99,235,0.18);
+      --text-primary-light: #0d1117;
+      --text-secondary-light: #4a5568;
+      --gradient-light: linear-gradient(135deg, #dde8f5 0%, #f0f4f8 50%, #e2ecf8 100%);
+
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font-mono: 'Space Mono', monospace;
+      --font-body: 'DM Sans', sans-serif;
+      --transition: 0.22s ease;
+      --header-h: 62px;
+      --player-h: 88px;
+    }
+
+    [data-theme="dark"] {
+      --bg: var(--bg-dark);
+      --surface: var(--surface-dark);
+      --surface2: var(--surface2-dark);
+      --border: var(--border-dark);
+      --text-primary: var(--text-primary-dark);
+      --text-secondary: var(--text-secondary-dark);
+      --gradient-bg: var(--gradient-dark);
+    }
+    [data-theme="light"] {
+      --bg: var(--bg-light);
+      --surface: var(--surface-light);
+      --surface2: var(--surface2-light);
+      --border: var(--border-light);
+      --text-primary: var(--text-primary-light);
+      --text-secondary: var(--text-secondary-light);
+      --gradient-bg: var(--gradient-light);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
+    img { display: block; }
+    ul { list-style: none; }
+
+    /* ═══════════════════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ═══════════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════════ */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--header-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-mono);
+      font-weight: 700; font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+    .logo-icon {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+    .logo-icon svg { width: 18px; height: 18px; fill: white; }
+    .logo-text span { color: var(--accent); }
+
+    .header-nav { display: flex; align-items: center; gap: 6px; }
+    .nav-link {
+      font-size: 0.875rem; font-weight: 500;
+      padding: 7px 13px; border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      transition: color var(--transition), background var(--transition);
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-primary);
+      background: var(--surface2);
+    }
+
+    .theme-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+      margin-left: 8px;
+      position: relative; overflow: hidden;
+    }
+    .theme-btn:hover { border-color: var(--accent); }
+    .theme-btn .icon-sun, .theme-btn .icon-moon {
+      position: absolute; transition: all 0.3s ease;
+    }
+    [data-theme="dark"] .icon-sun { opacity: 1; transform: scale(1); }
+    [data-theme="dark"] .icon-moon { opacity: 0; transform: scale(0.5); }
+    [data-theme="light"] .icon-sun { opacity: 0; transform: scale(0.5); }
+    [data-theme="light"] .icon-moon { opacity: 1; transform: scale(1); }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px; padding: 6px;
+      width: 36px; height: 36px; justify-content: center; align-items: center;
+    }
+    .hamburger span {
+      display: block; width: 20px; height: 2px;
+      background: var(--text-primary); border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ═══════════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════════ */
+    .app-layout {
+      padding-top: var(--header-h);
+      padding-bottom: var(--player-h);
+      min-height: 100vh;
+    }
+
+    /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
+    .hero {
+      padding: 48px 20px 32px;
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px;
+    }
+    .hero-text h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700; line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .hero-text h1 .hl { color: var(--accent); }
+    .hero-text p {
+      font-size: 0.95rem; color: var(--text-secondary);
+      max-width: 400px; line-height: 1.6;
+    }
+    .hero-stats {
+      display: flex; gap: 28px; margin-top: 20px;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: var(--font-mono);
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--accent);
+    }
+    .stat-label { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
+
+    .app-badges { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    .badge {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 16px; border-radius: 30px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.82rem; font-weight: 500;
+      transition: all var(--transition); white-space: nowrap;
+    }
+    .badge:hover { border-color: var(--accent); background: var(--surface2); }
+    .badge svg { width: 16px; height: 16px; }
+
+    /* ═══════════════════════════════════════════
+       MAIN CONTENT (sidebar + list)
+    ═══════════════════════════════════════════ */
+    .main-content {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 20px 40px;
+      display: grid; grid-template-columns: 260px 1fr; gap: 20px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky; top: calc(var(--header-h) + 16px);
+      height: fit-content;
+    }
+    .sidebar-section { margin-bottom: 16px; }
+    .sidebar-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-secondary);
+      padding: 0 4px; margin-bottom: 8px;
+    }
+
+    .country-btn {
+      width: 100%; text-align: left;
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: var(--radius-sm);
+      color: var(--text-secondary); font-size: 0.875rem;
+      transition: all var(--transition); position: relative;
+      border: 1px solid transparent;
+    }
+    .country-btn:hover { color: var(--text-primary); background: var(--surface2); }
+    .country-btn.active {
+      color: var(--accent);
+      background: rgba(74,144,217,0.1);
+      border-color: rgba(74,144,217,0.25);
+    }
+    .country-btn .flag { font-size: 1.05rem; }
+    .country-btn .count {
+      margin-left: auto; font-family: var(--font-mono);
+      font-size: 0.7rem; color: var(--text-secondary);
+      background: var(--surface2); padding: 1px 6px; border-radius: 99px;
+    }
+
+    /* Search */
+    .search-wrap {
+      position: relative; margin-bottom: 16px;
+    }
+    .search-input {
+      width: 100%; padding: 10px 14px 10px 38px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text-primary);
+      font: 0.875rem var(--font-body);
+      outline: none; transition: all var(--transition);
+    }
+    .search-input::placeholder { color: var(--text-secondary); }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .search-icon {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: var(--text-secondary); pointer-events: none;
+    }
+
+    /* Genre filter pills */
+    .genre-pills {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .genre-pill {
+      padding: 4px 11px; border-radius: 99px; font-size: 0.75rem;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text-secondary); transition: all var(--transition);
+    }
+    .genre-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .genre-pill.active {
+      background: var(--accent); color: #fff; border-color: var(--accent);
+    }
+
+    /* Station list */
+    .station-area { min-height: 500px; }
+    .station-grid {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .station-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 14px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border);
+      cursor: pointer; transition: all var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .station-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--accent); border-radius: 3px 0 0 3px;
+      opacity: 0; transition: opacity var(--transition);
+    }
+    .station-card:hover { border-color: var(--accent); transform: translateX(2px); background: var(--surface2); }
+    .station-card:hover::before { opacity: 1; }
+    .station-card.playing { border-color: var(--accent); background: rgba(74,144,217,0.08); }
+    .station-card.playing::before { opacity: 1; }
+
+    .station-logo {
+      width: 48px; height: 48px; border-radius: 10px;
+      object-fit: cover; background: var(--surface2);
+      flex-shrink: 0; border: 1px solid var(--border);
+    }
+    .station-logo-placeholder {
+      width: 48px; height: 48px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-size: 0.75rem; color: #fff;
+      flex-shrink: 0; font-weight: 700;
+    }
+
+    .station-info { flex: 1; min-width: 0; }
+    .station-name {
+      font-weight: 600; font-size: 0.9rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .station-desc {
+      font-size: 0.75rem; color: var(--text-secondary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    .station-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .station-codec {
+      font-family: var(--font-mono); font-size: 0.65rem;
+      color: var(--text-secondary); background: var(--surface2);
+      padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border);
+    }
+    .play-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--surface2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition); flex-shrink: 0;
+    }
+    .play-btn:hover, .station-card.playing .play-btn {
+      background: var(--accent); border-color: var(--accent);
+    }
+    .play-btn svg { width: 14px; height: 14px; }
+
+    /* Visualizer bars (animated when playing) */
+    .visualizer {
+      display: flex; align-items: flex-end; gap: 2px;
+      height: 16px; opacity: 0; transition: opacity 0.3s;
+    }
+    .station-card.playing .visualizer { opacity: 1; }
+    .visualizer span {
+      width: 3px; background: var(--accent); border-radius: 2px;
+      animation: bar 0.8s ease-in-out infinite alternate;
+    }
+    .visualizer span:nth-child(1) { height: 6px; animation-delay: 0s; }
+    .visualizer span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+    .visualizer span:nth-child(3) { height: 8px; animation-delay: 0.3s; }
+    .visualizer span:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+    .visualizer span:nth-child(5) { height: 6px; animation-delay: 0.25s; }
+    @keyframes bar {
+      from { transform: scaleY(0.4); }
+      to   { transform: scaleY(1.2); }
+    }
+
+    /* Skeleton loader */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: var(--radius-sm);
+    }
+    @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+    .skeleton-card {
+      height: 72px; border-radius: var(--radius); margin-bottom: 8px;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    .empty-state svg { margin: 0 auto 16px; opacity: 0.3; }
+    .empty-state h3 { font-size: 1rem; margin-bottom: 6px; color: var(--text-primary); }
+
+    /* ═══════════════════════════════════════════
+       BOTTOM PLAYER
+    ═══════════════════════════════════════════ */
+    .player-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      height: var(--player-h);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 16px;
+      padding: 0 20px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: background var(--transition);
+    }
+    .player-bar.idle { opacity: 0.7; }
+
+    .player-station {
+      display: flex; align-items: center; gap: 12px;
+      min-width: 0; flex: 1;
+    }
+    .player-logo {
+      width: 44px; height: 44px; border-radius: 9px;
+      object-fit: cover; border: 1px solid var(--border);
+      flex-shrink: 0; background: var(--surface2);
+    }
+    .player-logo-placeholder {
+      width: 44px; height: 44px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-size: 0.7rem; color: #fff;
+      flex-shrink: 0; font-weight: 700;
+    }
+    .player-meta { min-width: 0; }
+    .player-name {
+      font-weight: 600; font-size: 0.9rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 220px;
+    }
+    .player-genre { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
+
+    .player-controls { display: flex; align-items: center; gap: 12px; }
+    .player-play-btn {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 18px var(--accent-glow);
+      transition: all var(--transition);
+    }
+    .player-play-btn:hover { transform: scale(1.07); box-shadow: 0 0 28px var(--accent-glow); }
+    .player-play-btn svg { width: 18px; height: 18px; fill: white; }
+
+    .volume-wrap { display: flex; align-items: center; gap: 8px; }
+    .volume-wrap svg { width: 16px; height: 16px; color: var(--text-secondary); flex-shrink: 0; }
+    .volume-slider {
+      -webkit-appearance: none; appearance: none;
+      width: 90px; height: 4px; border-radius: 2px;
+      background: var(--surface2); outline: none; cursor: pointer;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px;
+      border-radius: 50%; background: var(--accent); cursor: pointer;
+    }
+
+    .loading-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); animation: pulse-dot 1s ease infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    .player-idle-text { font-size: 0.85rem; color: var(--text-secondary); }
+    .player-idle-text span { color: var(--accent); font-weight: 600; }
+
+    /* ═══════════════════════════════════════════
+       PAGES (About, Privacy, Contact)
+    ═══════════════════════════════════════════ */
+    .page-section { display: none; }
+    .page-section.visible { display: block; }
+
+    .page-content {
+      max-width: 760px; margin: 0 auto;
+      padding: 48px 20px 60px;
+    }
+    .page-content h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin-bottom: 8px;
+    }
+    .page-content .page-intro {
+      color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 36px;
+    }
+    .page-content h2 {
+      font-family: var(--font-mono);
+      font-size: 1rem; color: var(--accent); margin: 28px 0 10px;
+    }
+    .page-content p { line-height: 1.7; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 12px; }
+    .page-content ul li { padding: 4px 0 4px 16px; position: relative; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+    .page-content ul li::before { content: '›'; position: absolute; left: 0; color: var(--accent); }
+
+    .feature-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px;
+      margin: 20px 0;
+    }
+    .feature-card {
+      padding: 18px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border);
+      transition: border-color var(--transition);
+    }
+    .feature-card:hover { border-color: var(--accent); }
+    .feature-card .fc-icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .feature-card h3 { font-size: 0.875rem; font-weight: 600; margin-bottom: 4px; }
+    .feature-card p { font-size: 0.8rem; color: var(--text-secondary); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); }
+    .form-group input, .form-group textarea, .form-group select {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 10px 14px;
+      color: var(--text-primary); font: 0.875rem var(--font-body);
+      outline: none; transition: all var(--transition); resize: none;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .form-group select option { background: var(--surface); }
+    .submit-btn {
+      padding: 12px 28px; border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-weight: 600; font-size: 0.9rem;
+      transition: all var(--transition); align-self: flex-start;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 22px var(--accent-glow); }
+    .form-success {
+      display: none; padding: 14px 18px; border-radius: var(--radius);
+      background: rgba(74,144,217,0.1); border: 1px solid rgba(74,144,217,0.3);
+      color: var(--accent); font-size: 0.875rem;
+    }
+    .form-success.visible { display: block; }
+
+    /* Privacy */
+    .policy-block {
+      padding: 18px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .policy-block h3 {
+      font-size: 0.875rem; font-weight: 600; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .policy-block h3 .pill {
+      font-size: 0.65rem; padding: 2px 8px; border-radius: 99px;
+      background: rgba(74,144,217,0.15); color: var(--accent);
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      text-align: center; padding: 20px;
+      font-size: 0.75rem; color: var(--text-secondary);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════
+       MOBILE MENU
+    ═══════════════════════════════════════════ */
+    .mobile-nav {
+      display: none; position: fixed; top: var(--header-h); left: 0; right: 0;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      z-index: 99; padding: 12px 20px; flex-direction: column; gap: 4px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav .nav-link {
+      padding: 11px 14px; font-size: 0.9rem; border-radius: var(--radius-sm);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 800px) {
+      .header-nav .nav-link { display: none; }
+      .hamburger { display: flex; }
+      .main-content { grid-template-columns: 1fr; }
+      .sidebar { position: relative; top: 0; }
+      .country-btn { display: inline-flex; width: auto; }
+      .sidebar-section .countries-list {
+        display: flex; flex-wrap: wrap; gap: 6px;
+      }
+      .hero { flex-direction: column; padding: 28px 20px 20px; }
+      .hero-text h1 { font-size: 1.4rem; }
+      .volume-wrap { display: none; }
+      .player-name { max-width: 130px; }
+    }
+
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════ */
+    .fade-in { animation: fadeIn 0.35s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Pill "LIVE" badge */
+    .live-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px; border-radius: 99px;
+      background: rgba(239,68,68,0.15); color: #ef4444;
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+    .live-badge .dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #ef4444; animation: pulse-dot 1s ease infinite;
+    }
+
+    /* Results count */
+    .results-bar {
+      font-size: 0.78rem; color: var(--text-secondary);
+      margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .results-bar strong { color: var(--text-primary); }
+
+    /* Page #home section */
+    #page-home { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#" onclick="showPage('home')">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3C7.05 3 3 7.05 3 12s4.05 9 9 9 9-4.05 9-9-4.05-9-9-9zm0 2c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7zm0 3a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 110 4 2 2 0 010-4z"/>
+      </svg>
+    </div>
+    <span class="logo-text">Radio<span>Live</span></span>
+  </a>
+
+  <nav class="header-nav">
+    <a class="nav-link active" id="nav-home" href="#" onclick="showPage('home')">Player</a>
+    <a class="nav-link" id="nav-about" href="#" onclick="showPage('about')">About</a>
+    <a class="nav-link" id="nav-privacy" href="#" onclick="showPage('privacy')">Privacy</a>
+    <a class="nav-link" id="nav-contact" href="#" onclick="showPage('contact')">Contact</a>
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">
+      <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+      </svg>
+    </button>
+    <button class="hamburger" onclick="toggleMobileNav()" id="hamburger-btn">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobile-nav">
+  <a class="nav-link" href="#" onclick="showPage('home'); closeMobileNav()">🎵 Player</a>
+  <a class="nav-link" href="#" onclick="showPage('about'); closeMobileNav()">ℹ️ About</a>
+  <a class="nav-link" href="#" onclick="showPage('privacy'); closeMobileNav()">🔒 Privacy</a>
+  <a class="nav-link" href="#" onclick="showPage('contact'); closeMobileNav()">✉️ Contact</a>
+</div>
+
+<!-- ═══ PAGE: HOME ═══ -->
+<div class="app-layout" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Stream Radio<br><span class="hl">Worldwide</span> — Free.</h1>
+      <p>Hundreds of stations from Romania, Germany, USA, UK and more. No account, no ads, just music.</p>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num" id="stat-stations">352</div><div class="stat-label">Stations</div></div>
+        <div class="stat"><div class="stat-num" id="stat-countries">15+</div><div class="stat-label">Countries</div></div>
+        <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Live</div></div>
+      </div>
+      <div class="app-badges">
+        <a class="badge" href="https://play.google.com/store" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.38.21.82.22 1.22.01l11.29-6.38-2.5-2.5-10.01 8.87zm15.6-13.33L5.63 3.06c-.38-.21-.82-.21-1.21.01l10.87 9.65 3.49-2.29zm1.06 1.92l-3.66 2.4 3.66 2.4c.6-.36.96-.98.96-1.7s-.36-1.34-.96-1.7zM4.4.24C4.02.02 3.57.03 3.18.24L14.1 10l2.5-2.5L4.4.24z"/></svg>
+          Android App
+        </a>
+        <a class="badge" href="https://apps.apple.com" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          iOS App
+        </a>
+        <span class="live-badge"><span class="dot"></span>Live</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <div class="main-content">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Search -->
+      <div class="search-wrap">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="search-input" type="text" id="search-input" placeholder="Search stations…" oninput="handleSearch()" />
+      </div>
+
+      <!-- Countries -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">Countries</div>
+        <div class="countries-list" id="countries-list">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <!-- Genres -->
+      <div class="sidebar-section" id="genre-section" style="display:none">
+        <div class="sidebar-label">Genre</div>
+        <div class="genre-pills" id="genre-pills"></div>
+      </div>
+    </aside>
+
+    <!-- Station List -->
+    <section class="station-area">
+      <div class="results-bar">
+        <span id="results-label">Loading stations…</span>
+      </div>
+      <div class="station-grid" id="station-grid">
+        <!-- Skeletons -->
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a> · 
+    <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
+  </footer>
+</div>
+
+<!-- ═══ PAGE: ABOUT ═══ -->
+<div class="app-layout page-section" id="page-about">
+  <div class="page-content fade-in">
+    <h1>About <span style="color:var(--accent)">RadioLive</span></h1>
+    <p class="page-intro">Your free, open-access radio player for the web — and available as a native app on Android & iOS.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card"><div class="fc-icon">🌍</div><h3>Global Coverage</h3><p>Stations from 15+ countries including Romania, Germany, UK, USA, and more.</p></div>
+      <div class="feature-card"><div class="fc-icon">🎵</div><h3>All Genres</h3><p>Pop, Rock, Jazz, Classical, News, Talk — whatever fits your mood.</p></div>
+      <div class="feature-card"><div class="fc-icon">📱</div><h3>Native Apps</h3><p>Available on Android and iOS with lock-screen controls and background playback.</p></div>
+      <div class="feature-card"><div class="fc-icon">🔒</div><h3>Privacy First</h3><p>No account required. No personal data collected. Just press play.</p></div>
+      <div class="feature-card"><div class="fc-icon">⚡</div><h3>Instant Streaming</h3><p>Low-latency streams powered by ExoPlayer (Android) and AVPlayer (iOS).</p></div>
+      <div class="feature-card"><div class="fc-icon">🌙</div><h3>Dark & Light</h3><p>Comfortable listening in any environment with a full dark/light theme.</p></div>
+    </div>
+
+    <h2>// The Project</h2>
+    <p>RadioLive was built by <strong>Innovation Hub Studio Ltd</strong>, a UK-based mobile app studio. The mission is simple: make radio accessible to everyone, everywhere, for free.</p>
+    <p>The station database is community-driven and continuously updated, covering national broadcasters, indie stations, and genre-specific channels across Europe, the Americas, and beyond.</p>
+
+    <h2>// Technology</h2>
+    <ul>
+      <li>Android app built with Kotlin & ExoPlayer</li>
+      <li>iOS app built with Swift, SwiftUI & AVPlayer</li>
+      <li>Web player powered by the HTML5 Audio API</li>
+      <li>Station database hosted on GitHub as open JSON</li>
+      <li>Continuous expansion via pull requests and community feedback</li>
+    </ul>
+
+    <h2>// Get the App</h2>
+    <div class="app-badges" style="margin-top:14px">
+      <a class="badge" href="https://play.google.com/store" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.38.21.82.22 1.22.01l11.29-6.38-2.5-2.5-10.01 8.87zm15.6-13.33L5.63 3.06c-.38-.21-.82-.21-1.21.01l10.87 9.65 3.49-2.29zm1.06 1.92l-3.66 2.4 3.66 2.4c.6-.36.96-.98.96-1.7s-.36-1.34-.96-1.7zM4.4.24C4.02.02 3.57.03 3.18.24L14.1 10l2.5-2.5L4.4.24z"/></svg>
+        Google Play
+      </a>
+      <a class="badge" href="https://apps.apple.com" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        App Store
+      </a>
+    </div>
+  </div>
+  <footer>
+    &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a> · 
+    <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
+  </footer>
+</div>
+
+<!-- ═══ PAGE: PRIVACY ═══ -->
+<div class="app-layout page-section" id="page-privacy">
+  <div class="page-content fade-in">
+    <h1>Privacy <span style="color:var(--accent)">Policy</span></h1>
+    <p class="page-intro">Last updated: January 2025. RadioLive is designed with privacy at its core.</p>
+
+    <div class="policy-block">
+      <h3>Data We Collect <span class="pill">Minimal</span></h3>
+      <p>RadioLive does not collect any personally identifiable information. The app and website do not require registration or login. We do not store your listening history on our servers.</p>
+    </div>
+    <div class="policy-block">
+      <h3>Local Storage <span class="pill">On-device only</span></h3>
+      <p>Preferences such as theme (dark/light), volume, and favourite stations are stored locally on your device or browser. This data never leaves your device and is not accessible to us.</p>
+    </div>
+    <div class="policy-block">
+      <h3>Third-Party Streams <span class="pill">External</span></h3>
+      <p>When you play a station, your device connects directly to the radio station's streaming server. That connection is subject to the privacy policy of the respective broadcaster — RadioLive has no involvement in or access to that data.</p>
+    </div>
+    <div class="policy-block">
+      <h3>Analytics <span class="pill">None</span></h3>
+      <p>We do not use Google Analytics, Facebook Pixel, or any other tracking scripts. The website uses no cookies beyond those strictly necessary for theme persistence (stored in localStorage).</p>
+    </div>
+    <div class="policy-block">
+      <h3>Contact Form</h3>
+      <p>If you use the contact form, your name, email, and message are submitted via Formspree and forwarded to our team email. We use this data solely to respond to your enquiry and do not share it with third parties.</p>
+    </div>
+    <div class="policy-block">
+      <h3>Children</h3>
+      <p>RadioLive is suitable for all ages. We do not knowingly collect data from children under 13.</p>
+    </div>
+    <div class="policy-block">
+      <h3>Contact</h3>
+      <p>Questions about this policy? Email us at <a href="mailto:contact@innovationhubstudio.co.uk" style="color:var(--accent)">contact@innovationhubstudio.co.uk</a> or use the <a href="#" onclick="showPage('contact')" style="color:var(--accent)">contact form</a>.</p>
+    </div>
+  </div>
+  <footer>
+    &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a>
+  </footer>
+</div>
+
+<!-- ═══ PAGE: CONTACT ═══ -->
+<div class="app-layout page-section" id="page-contact">
+  <div class="page-content fade-in">
+    <h1>Get in <span style="color:var(--accent)">Touch</span></h1>
+    <p class="page-intro">Questions, station suggestions, bug reports — we'd love to hear from you.</p>
+
+    <div class="form-success" id="form-success">
+      ✅ Message sent! We'll get back to you within 24–48 hours.
+    </div>
+
+    <form class="contact-form" id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleFormSubmit(event)">
+      <div class="form-group">
+        <label for="cf-name">Your Name</label>
+        <input type="text" id="cf-name" name="name" placeholder="John Smith" required />
+      </div>
+      <div class="form-group">
+        <label for="cf-email">Email Address</label>
+        <input type="email" id="cf-email" name="email" placeholder="john@example.com" required />
+      </div>
+      <div class="form-group">
+        <label for="cf-subject">Subject</label>
+        <select id="cf-subject" name="subject">
+          <option value="general">General Enquiry</option>
+          <option value="station">Station Suggestion</option>
+          <option value="bug">Bug Report</option>
+          <option value="business">Business / Partnership</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" rows="5" placeholder="Tell us more…" required></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Send Message →</button>
+    </form>
+
+    <h2 style="margin-top:40px">// Direct Contact</h2>
+    <p>📧 <a href="mailto:contact@innovationhubstudio.co.uk" style="color:var(--accent)">contact@innovationhubstudio.co.uk</a></p>
+    <p>🌐 <a href="https://innovationhubstudio.co.uk" target="_blank" style="color:var(--accent)">innovationhubstudio.co.uk</a></p>
+    <p>📍 United Kingdom</p>
+  </div>
+  <footer>
+    &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a>
+  </footer>
+</div>
+
+<!-- BOTTOM PLAYER -->
+<div class="player-bar" id="player-bar">
+  <div class="player-station">
+    <div class="player-logo-placeholder" id="player-logo-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
+        <path d="M12 3C7.05 3 3 7.05 3 12s4.05 9 9 9 9-4.05 9-9-4.05-9-9-9zm0 2c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7zm0 3a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 110 4 2 2 0 010-4z"/>
+      </svg>
+    </div>
+    <div class="player-meta">
+      <div class="player-name" id="player-name">RadioLive</div>
+      <div class="player-genre" id="player-genre">Select a station to start</div>
+    </div>
+  </div>
+
+  <div class="player-controls">
+    <div class="loading-dot" id="loading-dot" style="display:none"></div>
+    <button class="player-play-btn" id="player-play-btn" onclick="togglePlay()">
+      <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="volume-wrap">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
+    </svg>
+    <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.02" value="0.85" oninput="setVolume(this.value)" />
+  </div>
+</div>
+
+<!-- AUDIO ELEMENT -->
+<audio id="radio-audio" preload="none"></audio>
+
+<script>
+/* ═══════════════════════════════════════════
+   THEME
+═══════════════════════════════════════════ */
+(function() {
+  const saved = localStorage.getItem('rl-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+})();
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('rl-theme', next);
+}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════ */
+function showPage(page) {
+  document.querySelectorAll('.app-layout').forEach(el => {
+    el.classList.add('page-section');
+    el.classList.remove('visible');
+  });
+  const target = document.getElementById('page-' + page);
+  if (target) {
+    target.classList.remove('page-section');
+    target.classList.add('visible');
+    // make it actually display
+    target.style.display = '';
+  }
+  // show all app-layouts that aren't page-sections
+  document.querySelectorAll('.app-layout:not(.page-section)').forEach(el => {
+    el.style.display = '';
+  });
+  // update nav
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Initial setup — show home
+(function() {
+  // Hide all page-sections except home
+  document.querySelectorAll('.page-section').forEach(el => { el.style.display = 'none'; });
+  document.getElementById('page-home').style.display = '';
+})();
+
+function toggleMobileNav() {
+  document.getElementById('mobile-nav').classList.toggle('open');
+}
+function closeMobileNav() {
+  document.getElementById('mobile-nav').classList.remove('open');
+}
+
+/* ═══════════════════════════════════════════
+   STATION DATA
+═══════════════════════════════════════════ */
+const COUNTRIES_CONFIG = [
+  { code: 'RO', label: 'Romania',     flag: '🇷🇴', file: null },
+  { code: 'DE', label: 'Germany',     flag: '🇩🇪', file: 'de' },
+  { code: 'RS', label: 'Serbia',      flag: '🇷🇸', file: 'rs' },
+  { code: 'CZ', label: 'Czechia',     flag: '🇨🇿', file: 'cz' },
+  { code: 'AR', label: 'Argentina',   flag: '🇦🇷', file: 'ar' },
+  { code: 'AT', label: 'Austria',     flag: '🇦🇹', file: 'at' },
+  { code: 'NL', label: 'Netherlands', flag: '🇳🇱', file: 'nl' },
+  { code: 'SK', label: 'Slovakia',    flag: '🇸🇰', file: 'sk' },
+  { code: 'AU', label: 'Australia',   flag: '🇦🇺', file: 'au' },
+  { code: 'CA', label: 'Canada',      flag: '🇨🇦', file: 'ca' },
+  { code: 'GR', label: 'Greece',      flag: '🇬🇷', file: 'gr' },
+  { code: 'MD', label: 'Moldova',     flag: '🇲🇩', file: 'md' },
+  { code: 'TR', label: 'Turkey',      flag: '🇹🇷', file: 'tr' },
+  { code: 'US', label: 'USA',         flag: '🇺🇸', file: 'us' },
+];
+
+const BASE_URL = 'https://raw.githubusercontent.com/liviurhos/radio-stations/main/';
+let allStations = [];
+let filteredStations = [];
+let currentCountry = 'RO';
+let currentGenre = null;
+let searchQuery = '';
+let currentStation = null;
+let isPlaying = false;
+let isLoading = false;
+
+const audio = document.getElementById('radio-audio');
+audio.volume = 0.85;
+
+/* ═══════════════════════════════════════════
+   LOAD STATIONS
+═══════════════════════════════════════════ */
+async function loadStations(countryCode) {
+  currentCountry = countryCode;
+  currentGenre = null;
+  searchQuery = '';
+  document.getElementById('search-input').value = '';
+
+  showSkeletons();
+
+  const cfg = COUNTRIES_CONFIG.find(c => c.code === countryCode);
+  const url = cfg && cfg.file
+    ? BASE_URL + 'stations-' + cfg.file + '.json'
+    : BASE_URL + 'stations.json';
+
+  try {
+    const resp = await fetch(url);
+    const data = await resp.json();
+    allStations = data.station || [];
+    renderCountryBtns();
+    extractGenres();
+    applyFilters();
+  } catch(e) {
+    document.getElementById('station-grid').innerHTML = `
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <h3>Couldn't load stations</h3>
+        <p>Check your connection or try another country.</p>
+      </div>`;
+  }
+}
+
+function showSkeletons() {
+  const grid = document.getElementById('station-grid');
+  grid.innerHTML = Array(6).fill('<div class="skeleton skeleton-card"></div>').join('');
+  document.getElementById('results-label').textContent = 'Loading…';
+}
+
+/* ═══════════════════════════════════════════
+   GENRES
+═══════════════════════════════════════════ */
+function extractGenres() {
+  const genreSet = new Set();
+  allStations.forEach(s => {
+    if (s.desc) {
+      s.desc.split('|').forEach(g => {
+        const t = g.trim();
+        if (t && t.length < 30) genreSet.add(t);
+      });
+    }
+  });
+  const genres = [...genreSet].slice(0, 12);
+  const container = document.getElementById('genre-pills');
+  const section = document.getElementById('genre-section');
+  if (genres.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  container.innerHTML = genres.map(g =>
+    `<button class="genre-pill" onclick="setGenre('${g.replace(/'/g,"&#39;")}')">${g}</button>`
+  ).join('');
+}
+
+function setGenre(g) {
+  currentGenre = currentGenre === g ? null : g;
+  document.querySelectorAll('.genre-pill').forEach(p => {
+    p.classList.toggle('active', p.textContent === currentGenre);
+  });
+  applyFilters();
+}
+
+/* ═══════════════════════════════════════════
+   FILTER + RENDER
+═══════════════════════════════════════════ */
+function normalise(s) {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+}
+
+function applyFilters() {
+  const q = normalise(searchQuery);
+  filteredStations = allStations.filter(s => {
+    const matchQ = !q || normalise(s.name||'').includes(q) || normalise(s.desc||'').includes(q);
+    const matchG = !currentGenre || (s.desc||'').includes(currentGenre);
+    return matchQ && matchG;
+  });
+  renderStations();
+}
+
+function handleSearch() {
+  searchQuery = document.getElementById('search-input').value;
+  applyFilters();
+}
+
+function renderStations() {
+  const grid = document.getElementById('station-grid');
+  const label = document.getElementById('results-label');
+  label.innerHTML = `<strong>${filteredStations.length}</strong> station${filteredStations.length !== 1 ? 's' : ''}`;
+
+  if (filteredStations.length === 0) {
+    grid.innerHTML = `<div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <h3>No stations found</h3><p>Try a different search or genre.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = filteredStations.map((s, i) => {
+    const isNowPlaying = currentStation && currentStation.name === s.name && isPlaying;
+    const abbr = (s.name||'??').substring(0,2).toUpperCase();
+    const logoHtml = s.imageURL
+      ? `<img class="station-logo" src="${escHtml(s.imageURL)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+        + `<div class="station-logo-placeholder" style="display:none">${abbr}</div>`
+      : `<div class="station-logo-placeholder">${abbr}</div>`;
+
+    return `<div class="station-card${isNowPlaying ? ' playing' : ''} fade-in" 
+               style="animation-delay:${Math.min(i * 30, 300)}ms"
+               onclick="playStation(${i})">
+      ${logoHtml}
+      <div class="station-info">
+        <div class="station-name">${escHtml(s.name||'Unknown')}</div>
+        <div class="station-desc">${escHtml(s.desc||'Radio Station')}</div>
+      </div>
+      <div class="station-right">
+        <div class="visualizer">${isNowPlaying ? '<span></span><span></span><span></span><span></span><span></span>' : ''}</div>
+        ${s._codec ? `<span class="station-codec">${escHtml(s._codec)}</span>` : ''}
+        <button class="play-btn" onclick="event.stopPropagation();playStation(${i})">
+          ${isNowPlaying
+            ? `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
+            : `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`
+          }
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ═══════════════════════════════════════════
+   COUNTRIES SIDEBAR
+═══════════════════════════════════════════ */
+function renderCountryBtns() {
+  const container = document.getElementById('countries-list');
+  container.innerHTML = COUNTRIES_CONFIG.map(c =>
+    `<button class="country-btn${c.code === currentCountry ? ' active' : ''}" onclick="loadStations('${c.code}')">
+      <span class="flag">${c.flag}</span>
+      <span>${c.label}</span>
+    </button>`
+  ).join('');
+}
+
+/* ═══════════════════════════════════════════
+   PLAYER
+═══════════════════════════════════════════ */
+function playStation(index) {
+  const s = filteredStations[index];
+  if (!s) return;
+
+  if (currentStation && currentStation.name === s.name) {
+    togglePlay(); return;
+  }
+
+  currentStation = s;
+  isPlaying = true;
+  updatePlayerUI();
+  startStream(s.streamURL);
+  renderStations();
+}
+
+function startStream(url) {
+  audio.pause();
+  setLoadingState(true);
+  audio.src = url;
+  audio.load();
+  audio.play().then(() => setLoadingState(false)).catch(() => setLoadingState(false));
+}
+
+function togglePlay() {
+  if (!currentStation) return;
+  if (audio.paused) {
+    audio.play().catch(()=>{});
+    isPlaying = true;
+  } else {
+    audio.pause();
+    isPlaying = false;
+  }
+  updatePlayerUI();
+  renderStations();
+}
+
+function setVolume(v) {
+  audio.volume = parseFloat(v);
+}
+
+function setLoadingState(loading) {
+  isLoading = loading;
+  document.getElementById('loading-dot').style.display = loading ? 'block' : 'none';
+}
+
+audio.addEventListener('playing', () => { setLoadingState(false); isPlaying = true; updatePlayerUI(); renderStations(); });
+audio.addEventListener('waiting', () => setLoadingState(true));
+audio.addEventListener('ended',   () => { isPlaying = false; updatePlayerUI(); renderStations(); });
+audio.addEventListener('error',   () => { setLoadingState(false); isPlaying = false; updatePlayerUI(); renderStations(); });
+
+function updatePlayerUI() {
+  const nameEl   = document.getElementById('player-name');
+  const genreEl  = document.getElementById('player-genre');
+  const iconEl   = document.getElementById('play-icon');
+  const logoWrap = document.getElementById('player-logo-wrap');
+
+  if (currentStation) {
+    nameEl.textContent  = currentStation.name || 'RadioLive';
+    genreEl.textContent = currentStation.desc || '';
+
+    // logo
+    if (currentStation.imageURL) {
+      logoWrap.innerHTML = `<img class="player-logo" src="${escHtml(currentStation.imageURL)}" alt="" onerror="this.parentElement.innerHTML='<span style=\\"font-family:var(--font-mono);font-size:.7rem;color:#fff;font-weight:700\\">${(currentStation.name||'??').substring(0,2).toUpperCase()}</span>'">`;
+    } else {
+      const ab = (currentStation.name||'??').substring(0,2).toUpperCase();
+      logoWrap.innerHTML = `<span style="font-family:var(--font-mono);font-size:.7rem;color:#fff;font-weight:700">${ab}</span>`;
+    }
+  }
+
+  if (isPlaying) {
+    iconEl.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+  } else {
+    iconEl.innerHTML = '<path d="M8 5v14l11-7z"/>';
+  }
+}
+
+/* ═══════════════════════════════════════════
+   CONTACT FORM
+═══════════════════════════════════════════ */
+async function handleFormSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn  = form.querySelector('.submit-btn');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+  try {
+    const resp = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { Accept: 'application/json' }
+    });
+    if (resp.ok) {
+      form.style.display = 'none';
+      document.getElementById('form-success').classList.add('visible');
+    } else {
+      btn.textContent = 'Error — try again';
+      btn.disabled = false;
+    }
+  } catch {
+    btn.textContent = 'Error — try again';
+    btn.disabled = false;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+renderCountryBtns();
+loadStations('RO');
+</script>
+</body>
+</html>
