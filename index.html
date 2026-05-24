@@ -1140,6 +1140,7 @@
     <div class="player-meta">
       <div class="player-name" id="player-name">RadioLive</div>
       <div class="player-genre" id="player-genre">Select a station to start</div>
+      <div class="player-track" id="player-track"></div>
     </div>
   </div>
 
@@ -1595,7 +1596,7 @@ async function fetchIcyMeta() {
           if (match && match[1] && match[1].trim()) {
             const track = match[1].trim();
             if (track && track !== currentStation.name) {
-              document.getElementById('player-track').textContent = track;
+              const tel2 = document.getElementById('player-track'); if (tel2) tel2.textContent = track;
               // Update MediaSession
               if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
                 navigator.mediaSession.metadata.title = track;
@@ -1618,7 +1619,8 @@ function concat(a, b) {
 }
 function stopMetaPolling() {
   if (metaInterval) { clearInterval(metaInterval); metaInterval = null; }
-  document.getElementById('player-track').textContent = '';
+  const el = document.getElementById('player-track');
+  if (el) el.textContent = '';
 }
 
 function updateMediaSession() {
