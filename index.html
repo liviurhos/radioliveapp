@@ -508,7 +508,7 @@
       transition: border-color var(--transition);
     }
     .feature-card:hover { border-color: var(--accent); }
-    .feature-card .fc-icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .feature-card .fc-icon { width: 40px; height: 40px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; background: rgba(74,144,217,0.1); border-radius: 10px; color: var(--accent); }
     .feature-card h3 { font-size: 0.875rem; font-weight: 600; margin-bottom: 4px; }
     .feature-card p { font-size: 0.8rem; color: var(--text-secondary); }
 
@@ -694,7 +694,9 @@
     <a class="nav-link" id="nav-about" href="#" onclick="showPage('about')">About</a>
     <a class="nav-link" id="nav-faq" href="#" onclick="showPage('faq')">FAQ</a>
     <a class="nav-link" id="nav-contact" href="#" onclick="showPage('contact')">Contact</a>
-    <a class="nav-link" id="nav-legal" href="privacy.html">Legal</a>
+    <a class="nav-link" href="privacy.html">Privacy</a>
+    <a class="nav-link" href="terms.html">Terms</a>
+    <a class="nav-link" href="eula.html">EULA</a>
     <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">
       <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -714,11 +716,13 @@
 
 <!-- MOBILE NAV -->
 <div class="mobile-nav" id="mobile-nav">
-  <a class="nav-link" href="#" onclick="showPage('home'); closeMobileNav()">🎵 Player</a>
-  <a class="nav-link" href="#" onclick="showPage('about'); closeMobileNav()">ℹ️ About</a>
-  <a class="nav-link" href="#" onclick="showPage('faq'); closeMobileNav()">❓ FAQ</a>
-  <a class="nav-link" href="#" onclick="showPage('contact'); closeMobileNav()">✉️ Contact</a>
-  <a class="nav-link" href="privacy.html" onclick="closeMobileNav()">⚖️ Legal</a>
+  <a class="nav-link" href="#" onclick="showPage('home'); closeMobileNav()">Player</a>
+  <a class="nav-link" href="#" onclick="showPage('about'); closeMobileNav()">About</a>
+  <a class="nav-link" href="#" onclick="showPage('faq'); closeMobileNav()">FAQ</a>
+  <a class="nav-link" href="#" onclick="showPage('contact'); closeMobileNav()">Contact</a>
+  <a class="nav-link" href="privacy.html" onclick="closeMobileNav()">Privacy</a>
+  <a class="nav-link" href="terms.html" onclick="closeMobileNav()">Terms</a>
+  <a class="nav-link" href="eula.html" onclick="closeMobileNav()">EULA</a>
 </div>
 
 <!-- ═══ PAGE: HOME ═══ -->
@@ -808,12 +812,30 @@
     <p class="page-intro">Your free, open-access radio player for the web — and available as a native app on Android & iOS.</p>
 
     <div class="feature-grid">
-      <div class="feature-card"><div class="fc-icon">🌍</div><h3>Global Coverage</h3><p>Stations from 15+ countries including Romania, Germany, UK, USA, and more.</p></div>
-      <div class="feature-card"><div class="fc-icon">🎵</div><h3>All Genres</h3><p>Pop, Rock, Jazz, Classical, News, Talk — whatever fits your mood.</p></div>
-      <div class="feature-card"><div class="fc-icon">📱</div><h3>Native Apps</h3><p>Available on Android and iOS with lock-screen controls and background playback.</p></div>
-      <div class="feature-card"><div class="fc-icon">🔒</div><h3>Privacy First</h3><p>No account required. No personal data collected. Just press play.</p></div>
-      <div class="feature-card"><div class="fc-icon">⚡</div><h3>Instant Streaming</h3><p>Low-latency streams powered by ExoPlayer (Android) and AVPlayer (iOS).</p></div>
-      <div class="feature-card"><div class="fc-icon">🌙</div><h3>Dark & Light</h3><p>Comfortable listening in any environment with a full dark/light theme.</p></div>
+      <div class="feature-card">
+        <div class="fc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <h3>Global Coverage</h3><p>350+ stations across 25 countries — Romania, Germany, UK, USA, France, and more.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+        <h3>All Genres</h3><p>Pop, Rock, Jazz, Classical, News, Talk — curated stations for every mood.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+        <h3>Native Apps</h3><p>Android &amp; iOS apps with lock-screen controls and background playback.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h3>Privacy First</h3><p>No account required. No personal data collected. Just press play.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <h3>Instant Streaming</h3><p>Low-latency streams via ExoPlayer (Android) and AVPlayer (iOS).</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
+        <h3>Dark &amp; Light Theme</h3><p>Comfortable listening in any environment with a full theme toggle.</p>
+      </div>
     </div>
 
     <h2>// The Project</h2>
@@ -1252,6 +1274,12 @@ function closeMobileNav() {
 /* ═══════════════════════════════════════════
    STATION DATA
 ═══════════════════════════════════════════ */
+// Known better stream URLs (override stale JSON entries)
+const STREAM_OVERRIDES = {
+  'Radio Zu': 'https://ivm.antenaplay.ro/liveaudio/radiozu/playlist.m3u8',
+  'Kiss Fm Ro': 'https://live.kissfm.ro/kissfm.aacp',
+};
+
 const COUNTRIES_CONFIG = [
   { code: 'RO', label: 'Romania',     flag: '🇷🇴', file: null },
   { code: 'AR', label: 'Argentina',   flag: '🇦🇷', file: 'argentina' },
@@ -1462,7 +1490,9 @@ function playStation(index) {
   currentStation = s;
   isPlaying = true;
   updatePlayerUI();
-  startStream(s.streamURL);
+  // Use override URL if available, otherwise use JSON url
+  const url = STREAM_OVERRIDES[s.name] || s.streamURL;
+  startStream(url);
   renderStations();
 }
 
@@ -1524,98 +1554,79 @@ audio.addEventListener('error',   () => {
 
 // ICY metadata via periodic title polling
 let metaInterval = null;
+async function fetchRadioBrowserMeta(stationName) {
+  try {
+    const q = encodeURIComponent(stationName);
+    const resp = await fetch(`https://de1.api.radio-browser.info/json/stations/byname/${q}?limit=1&hidebroken=true`);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    return data && data[0] ? data[0] : null;
+  } catch(e) { return null; }
+}
+
+async function fetchNowPlaying(stationName) {
+  try {
+    // Try Radio Browser now_playing endpoint
+    const q = encodeURIComponent(stationName);
+    const resp = await fetch(`https://de1.api.radio-browser.info/json/stations/byname/${q}?limit=1`);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    if (data && data[0] && data[0].lastcheckok) {
+      // Fetch now playing from stream info
+      const streamResp = await fetch(`https://de1.api.radio-browser.info/json/url/${data[0].stationuuid}`);
+    }
+    return null;
+  } catch(e) { return null; }
+}
+
 function startMetaPolling() {
   stopMetaPolling();
-  // Try to read stream title from audio element title if available
-  metaInterval = setInterval(() => {
+  // Poll Radio Browser API for now-playing metadata every 15s
+  const doFetch = async () => {
+    if (!currentStation) return;
     try {
-      // Some browsers expose stream metadata via the audio title
-      const t = document.getElementById('radio-audio').title;
-      if (t && t !== currentStation?.name) {
-        document.getElementById('player-track').textContent = t;
+      const name = encodeURIComponent(currentStation.name || '');
+      const resp = await fetch(`https://de1.api.radio-browser.info/json/stations/byname/${name}?limit=1&hidebroken=false`);
+      if (!resp.ok) return;
+      const data = await resp.json();
+      if (data && data[0] && data[0].name) {
+        // Radio Browser doesn't have live now-playing, but we can try the stream tags
+        const tags = data[0].tags || '';
+        // nothing useful for live metadata from this endpoint
       }
     } catch(e) {}
-  }, 3000);
-}
-function stopMetaPolling() {
-  if (metaInterval) { clearInterval(metaInterval); metaInterval = null; }
-  document.getElementById('player-track').textContent = '';
-}
-
-function updateMediaSession() {
-  if (!currentStation || !('mediaSession' in navigator)) return;
-  navigator.mediaSession.metadata = new MediaMetadata({
-    title: currentStation.name || 'RadioLive',
-    artist: currentStation.desc || 'Radio',
-    album: 'RadioLive',
-    artwork: currentStation.imageURL ? [
-      { src: currentStation.imageURL, sizes: '512x512', type: 'image/png' }
-    ] : []
-  });
-  navigator.mediaSession.setActionHandler('play',  () => { audio.play(); isPlaying = true; updatePlayerUI(); });
-  navigator.mediaSession.setActionHandler('pause', () => { audio.pause(); isPlaying = false; updatePlayerUI(); });
-  navigator.mediaSession.setActionHandler('stop',  () => { audio.pause(); isPlaying = false; updatePlayerUI(); });
+    // Also try reading ICY from a CORS proxy
+    fetchIcyMeta();
+  };
+  doFetch();
+  metaInterval = setInterval(doFetch, 15000);
 }
 
-function updatePlayerUI() {
-  const nameEl   = document.getElementById('player-name');
-  const genreEl  = document.getElementById('player-genre');
-  const iconEl   = document.getElementById('play-icon');
-  const logoWrap = document.getElementById('player-logo-wrap');
-
-  if (currentStation) {
-    nameEl.textContent  = currentStation.name || 'RadioLive';
-    genreEl.textContent = currentStation.desc || '';
-
-    // logo
-    if (currentStation.imageURL) {
-      logoWrap.innerHTML = `<img class="player-logo" src="${escHtml(currentStation.imageURL)}" alt="" onerror="this.parentElement.innerHTML='<span style=\\"font-family:var(--font-mono);font-size:.7rem;color:#fff;font-weight:700\\">${(currentStation.name||'??').substring(0,2).toUpperCase()}</span>'">`;
-    } else {
-      const ab = (currentStation.name||'??').substring(0,2).toUpperCase();
-      logoWrap.innerHTML = `<span style="font-family:var(--font-mono);font-size:.7rem;color:#fff;font-weight:700">${ab}</span>`;
-    }
-  }
-
-  if (isPlaying) {
-    iconEl.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-  } else {
-    iconEl.innerHTML = '<path d="M8 5v14l11-7z"/>';
-  }
-}
-
-/* ═══════════════════════════════════════════
-   CONTACT FORM
-═══════════════════════════════════════════ */
-async function handleFormSubmit(e) {
-  e.preventDefault();
-  const form = e.target;
-  const btn  = form.querySelector('.submit-btn');
-  btn.textContent = 'Sending…';
-  btn.disabled = true;
+async function fetchIcyMeta() {
+  if (!currentStation) return;
   try {
-    const resp = await fetch(form.action, {
-      method: 'POST',
-      body: new FormData(form),
-      headers: { Accept: 'application/json' }
+    // Use a public CORS proxy to read ICY metadata headers
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(currentStation.streamURL)}`;
+    const resp = await fetch(proxyUrl, {
+      headers: { 'Icy-MetaData': '1' },
+      method: 'GET',
+      signal: AbortSignal.timeout(4000)
     });
-    if (resp.ok) {
-      form.style.display = 'none';
-      document.getElementById('form-success').classList.add('visible');
-    } else {
-      btn.textContent = 'Error — try again';
-      btn.disabled = false;
-    }
-  } catch {
-    btn.textContent = 'Error — try again';
-    btn.disabled = false;
-  }
-}
-
-/* ═══════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════ */
-renderCountryBtns();
-loadStations('RO');
-</script>
-</body>
-</html>
+    const icyInterval = resp.headers.get('icy-metaint');
+    if (!icyInterval) return;
+    const reader = resp.body.getReader();
+    const interval = parseInt(icyInterval);
+    let bytesRead = 0;
+    let buffer = new Uint8Array(0);
+    const readChunk = async () => {
+      const { done, value } = await reader.read();
+      if (done) return;
+      buffer = concat(buffer, value);
+      bytesRead += value.length;
+      if (bytesRead >= interval + 4080) {
+        // Extract metadata from buffer
+        const metaLenByte = buffer[interval];
+        const metaLen = metaLenByte * 16;
+        if (metaLen > 0 && buffer.length >= interval + 1 + metaLen) {
+          const metaBytes = buffer.slice(interval + 1, interval + 1 + metaLen);
+          const metaStr = new TextDecoder('utf-8', {fatal:false}).decode(metaBytes).replace(/
