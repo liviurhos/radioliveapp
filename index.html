@@ -287,7 +287,9 @@
     /* Station list */
     .station-area { min-height: 500px; }
     .station-grid {
-      display: flex; flex-direction: column; gap: 8px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
     }
     .station-card {
       display: flex; align-items: center; gap: 14px;
@@ -585,6 +587,7 @@
       .hero-text h1 { font-size: 1.4rem; }
       .volume-wrap { display: none; }
       .player-name { max-width: 130px; }
+      .station-grid { grid-template-columns: 1fr; }
     }
 
     /* ═══════════════════════════════════════════
