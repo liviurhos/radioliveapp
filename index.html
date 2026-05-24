@@ -97,13 +97,14 @@
       display: flex; align-items: center;
       padding: 0 24px;
       border-bottom: 1px solid transparent;
-      transition: background var(--transition), border-color var(--transition);
+      transition: background var(--transition), border-color var(--transition), transform 0.35s ease;
     }
     #main-nav.scrolled {
       background: var(--surface);
       backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       border-color: var(--border);
     }
+    #main-nav.nav-hidden { transform: translateY(-100%); }
     .nav-inner {
       max-width: 1100px; margin: 0 auto; width: 100%;
       display: flex; align-items: center; justify-content: space-between; gap: 2rem;
@@ -1166,6 +1167,16 @@
 
 <script>
 /* ═══════════════════════════════════════════
+   PROTECT SOURCE
+═══════════════════════════════════════════ */
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if (e.key === 'F12') { e.preventDefault(); return false; }
+  if (e.ctrlKey && e.shiftKey && ['I','i','J','j','C','c'].includes(e.key)) { e.preventDefault(); return false; }
+  if (e.ctrlKey && ['U','u','S','s'].includes(e.key)) { e.preventDefault(); return false; }
+});
+
+/* ═══════════════════════════════════════════
    THEME
 ═══════════════════════════════════════════ */
 (function() {
@@ -1230,6 +1241,7 @@ function showPage(page) {
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     nav.classList.toggle('scrolled', y > 40);
+    nav.classList.toggle('nav-hidden', y > last && y > 100);
     last = y;
   }, {passive: true});
 })();
@@ -1400,8 +1412,9 @@ function renderStations() {
     const isNowPlaying = currentStation && currentStation.name === s.name && isPlaying;
     const abbr = (s.name||'??').substring(0,2).toUpperCase();
     const logoHtml = s.imageURL
-      ? `<img class="station-logo" src="${escHtml(s.imageURL)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
-        + `<div class="station-logo-placeholder" style="display:none">${abbr}</div>`
+      ? `<img class="station-logo" src="${escHtml(s.imageURL)}" alt="" loading="lazy"
+           style="background:linear-gradient(135deg,var(--accent2),var(--accent))"
+           onerror="this.src='';this.style.background='linear-gradient(135deg,var(--accent2),var(--accent))';this.insertAdjacentHTML('afterend','<span style=\'position:absolute;font-family:var(--font-mono);font-size:.75rem;color:#fff;font-weight:700\'>${abbr}</span>');this.style.opacity='0'">`
       : `<div class="station-logo-placeholder">${abbr}</div>`;
 
     return `<div class="station-card${isNowPlaying ? ' playing' : ''} fade-in" 
@@ -1567,7 +1580,26 @@ function startMetaPolling() {
 async function fetchIcyMeta() {
   if (!currentStation) return;
   try {
-    // Use a public CORS proxy to read ICY metadata headers
+    // Always use proxy for metadata (works for both http and https streams)
+    const streamUrl = STREAM_OVERRIDES[currentStation.name] || currentStation.streamURL;
+    const metaUrl = `https://proxy.radioliveapp.co.uk/meta?url=${encodeURIComponent(streamUrl)}`;
+    const resp = await fetch(metaUrl, { signal: AbortSignal.timeout(5000) });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.title && data.title.trim()) {
+        const el = document.getElementById('player-track');
+        if (el) el.textContent = data.title;
+        if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
+          navigator.mediaSession.metadata.title = data.title;
+        }
+      }
+    }
+  } catch(e) {}
+}
+
+async function fetchIcyMetaOld() {
+  if (!currentStation) return;
+  try {
     const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(currentStation.streamURL)}`;
     const resp = await fetch(proxyUrl, {
       headers: { 'Icy-MetaData': '1' },
