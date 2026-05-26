@@ -123,8 +123,11 @@
       color: var(--text-secondary);
       transition: color var(--transition), background var(--transition);
     }
-    .nav-links a:hover, .nav-links a.active {
+    .nav-links a:hover {
       color: var(--text-primary); background: var(--surface2);
+    }
+    .nav-links a.active {
+      color: var(--accent); background: rgba(74,144,217,0.1);
     }
     .nav-right { display: flex; align-items: center; gap: 8px; }
     .theme-btn {
@@ -1223,8 +1226,8 @@ function showPage(page) {
   // Show target
   const target = document.getElementById('page-' + page);
   if (target) target.style.display = '';
-  // Update nav active state
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  // Update nav active state - clear ALL links in nav-links
+  document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
   const navEl = document.getElementById('nav-' + page);
   if (navEl) navEl.classList.add('active');
   window.scrollTo(0, 0);
