@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -290,9 +290,15 @@
       display: flex; align-items: center; gap: 14px;
       padding: 12px 14px; border-radius: var(--radius);
       background: var(--surface); border: 1px solid var(--border);
-      cursor: pointer; transition: all var(--transition);
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition), transform var(--transition);
       position: relative; overflow: hidden;
+      content-visibility: auto;
+      contain-intrinsic-size: auto 74px;
     }
+    .station-card .icon-pause { display: none; }
+    .station-card.playing .icon-play  { display: none; }
+    .station-card.playing .icon-pause { display: block; }
     .station-card::before {
       content: '';
       position: absolute; left: 0; top: 0; bottom: 0;
@@ -773,7 +779,7 @@
 
   <footer>
     &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a> · 
-    <a href="#" href="privacy.html">Privacy Policy</a>
+    <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="eula.html">EULA</a>
   </footer>
 </div>
 
@@ -786,7 +792,7 @@
     <div class="feature-grid">
       <div class="feature-card">
         <div class="fc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-        <h3>Global Coverage</h3><p>350+ stations across 25 countries — Romania, Germany, UK, USA, France, and more.</p>
+        <h3>Global Coverage</h3><p>2000+ stations across 25 countries — Romania, Germany, UK, USA, France, and more.</p>
       </div>
       <div class="feature-card">
         <div class="fc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
@@ -837,7 +843,7 @@
   </div>
   <footer>
     &copy; 2025 RadioLive — <a href="https://innovationhubstudio.co.uk" target="_blank">Innovation Hub Studio Ltd</a> · 
-    <a href="#" href="privacy.html">Privacy Policy</a>
+    <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="eula.html">EULA</a>
   </footer>
 </div>
 
@@ -886,7 +892,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="faq-a">
-          <p>Currently 350+ stations across 25 countries including Romania, Germany, UK, USA, France, Italy, Spain, Greece, Turkey, and more. We continuously add new stations — suggest one via the Contact page!</p>
+          <p>Currently 2000+ stations across 25 countries including Romania, Germany, UK, USA, France, Italy, Spain, Greece, Turkey, and more. We continuously add new stations — suggest one via the Contact page!</p>
         </div>
       </div>
     </div>
@@ -1189,7 +1195,7 @@ document.addEventListener('keydown', e => {
    THEME
 ═══════════════════════════════════════════ */
 (function() {
-  const saved = localStorage.getItem('rl-theme') || 'dark';
+  const saved = localStorage.getItem('rl-theme') || 'light';
   document.documentElement.setAttribute('data-theme', saved);
 })();
 
@@ -1400,9 +1406,13 @@ function applyFilters() {
   renderStations();
 }
 
+let searchDebounce = null;
 function handleSearch() {
-  searchQuery = document.getElementById('search-input').value;
-  applyFilters();
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    searchQuery = document.getElementById('search-input').value;
+    applyFilters();
+  }, 200);
 }
 
 function renderStations() {
@@ -1418,16 +1428,15 @@ function renderStations() {
   }
 
   grid.innerHTML = filteredStations.map((s, i) => {
-    const isNowPlaying = currentStation && currentStation.name === s.name && isPlaying;
     const abbr = (s.name||'??').substring(0,2).toUpperCase();
     const logoHtml = s.imageURL
       ? `<img class="station-logo" src="${escHtml(s.imageURL)}" alt="" loading="lazy"
            style="background:linear-gradient(135deg,var(--accent2),var(--accent))"
-           onerror="this.src='';this.style.background='linear-gradient(135deg,var(--accent2),var(--accent))';this.insertAdjacentHTML('afterend','<span style=\'position:absolute;font-family:var(--font-mono);font-size:.75rem;color:#fff;font-weight:700\'>${abbr}</span>');this.style.opacity='0'">`
+           onerror="this.src='';this.style.background='linear-gradient(135deg,var(--accent2),var(--accent))';this.style.opacity='0'">`
       : `<div class="station-logo-placeholder">${abbr}</div>`;
 
-    return `<div class="station-card${isNowPlaying ? ' playing' : ''} fade-in" 
-               style="animation-delay:${Math.min(i * 30, 300)}ms"
+    return `<div class="station-card${currentStation && currentStation.name === s.name && isPlaying ? ' playing' : ''}"
+               data-name="${escHtml(s.name||'')}"
                onclick="playStation(${i})">
       ${logoHtml}
       <div class="station-info">
@@ -1435,17 +1444,23 @@ function renderStations() {
         <div class="station-desc">${escHtml(s.desc||'Radio Station')}</div>
       </div>
       <div class="station-right">
-        <div class="visualizer">${isNowPlaying ? '<span></span><span></span><span></span><span></span><span></span>' : ''}</div>
+        <div class="visualizer"><span></span><span></span><span></span><span></span><span></span></div>
         ${s._codec ? `<span class="station-codec">${escHtml(s._codec)}</span>` : ''}
         <button class="play-btn" onclick="event.stopPropagation();playStation(${i})">
-          ${isNowPlaying
-            ? `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
-            : `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`
-          }
+          <svg class="icon-play" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="icon-pause" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
       </div>
     </div>`;
   }).join('');
+}
+
+// Lightweight: toggles .playing class only - no DOM rebuild, no lag
+function updatePlayingState() {
+  const name = (currentStation && isPlaying) ? currentStation.name : null;
+  document.querySelectorAll('.station-card').forEach(card => {
+    card.classList.toggle('playing', card.dataset.name === name);
+  });
 }
 
 function escHtml(s) {
@@ -1483,10 +1498,9 @@ function playStation(index) {
   currentStation = s;
   isPlaying = true;
   updatePlayerUI();
-  // Use override URL if available, otherwise use JSON url
+  updatePlayingState();
   const url = STREAM_OVERRIDES[s.name] || s.streamURL;
   startStream(url);
-  renderStations();
 }
 
 function startStream(url) {
@@ -1514,7 +1528,7 @@ function togglePlay() {
     isPlaying = false;
   }
   updatePlayerUI();
-  renderStations();
+  updatePlayingState();
 }
 
 function setVolume(v) {
@@ -1527,145 +1541,55 @@ function setLoadingState(loading) {
 }
 
 audio.addEventListener('playing', () => { 
-  setLoadingState(false); isPlaying = true; updatePlayerUI(); renderStations();
-    updateMediaSession();
+  setLoadingState(false); isPlaying = true; updatePlayerUI(); updatePlayingState();
+  updateMediaSession();
 });
 audio.addEventListener('waiting', () => setLoadingState(true));
-audio.addEventListener('ended',   () => { isPlaying = false; updatePlayerUI(); renderStations(); });
+audio.addEventListener('ended',   () => { isPlaying = false; updatePlayerUI(); updatePlayingState(); });
 audio.addEventListener('error',   () => { 
-  setLoadingState(false); isPlaying = false; updatePlayerUI(); renderStations();
-  });
+  setLoadingState(false); isPlaying = false; updatePlayerUI(); updatePlayingState();
+});
 
-// ICY metadata via periodic title polling
+// ICY metadata via our proxy - polled every 20s
 let metaInterval = null;
-async function fetchRadioBrowserMeta(stationName) {
-  try {
-    const q = encodeURIComponent(stationName);
-    const resp = await fetch(`https://de1.api.radio-browser.info/json/stations/byname/${q}?limit=1&hidebroken=true`);
-    if (!resp.ok) return null;
-    const data = await resp.json();
-    return data && data[0] ? data[0] : null;
-  } catch(e) { return null; }
-}
-
-async function fetchNowPlaying(stationName) {
-  try {
-    // Try Radio Browser now_playing endpoint
-    const q = encodeURIComponent(stationName);
-    const resp = await fetch(`https://de1.api.radio-browser.info/json/stations/byname/${q}?limit=1`);
-    if (!resp.ok) return null;
-    const data = await resp.json();
-    if (data && data[0] && data[0].lastcheckok) {
-      // Fetch now playing from stream info
-      const streamResp = await fetch(`https://de1.api.radio-browser.info/json/url/${data[0].stationuuid}`);
-    }
-    return null;
-  } catch(e) { return null; }
-}
 
 function startMetaPolling() {
   stopMetaPolling();
-  // Poll Radio Browser API for now-playing metadata every 15s
-  const doFetch = async () => {
-    if (!currentStation) return;
-    try {
-      const name = encodeURIComponent(currentStation.name || '');
-      const resp = await fetch(`https://de1.api.radio-browser.info/json/stations/byname/${name}?limit=1&hidebroken=false`);
-      if (!resp.ok) return;
-      const data = await resp.json();
-      if (data && data[0] && data[0].name) {
-        // Radio Browser doesn't have live now-playing, but we can try the stream tags
-        const tags = data[0].tags || '';
-        // nothing useful for live metadata from this endpoint
-      }
-    } catch(e) {}
-    // Also try reading ICY from a CORS proxy
-    fetchIcyMeta();
-  };
-  doFetch();
-  metaInterval = setInterval(doFetch, 15000);
+  fetchIcyMeta();
+  metaInterval = setInterval(fetchIcyMeta, 20000);
 }
 
 async function fetchIcyMeta() {
   if (!currentStation) return;
+  const stationAtRequest = currentStation.name;
   try {
-    // Always use proxy for metadata (works for both http and https streams)
     const streamUrl = STREAM_OVERRIDES[currentStation.name] || currentStation.streamURL;
     const metaUrl = `https://proxy.radioliveapp.co.uk/meta?url=${encodeURIComponent(streamUrl)}`;
-    const resp = await fetch(metaUrl, { signal: AbortSignal.timeout(5000) });
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.title && data.title.trim()) {
-        const el = document.getElementById('player-track');
-        if (el) {
-          const t = data.title.trim();
-          el.textContent = t + '   •   ' + t + '   •   ' + t;
+    const resp = await fetch(metaUrl, { signal: AbortSignal.timeout(6000) });
+    if (!resp.ok) return;
+    const data = await resp.json();
+    if (!currentStation || currentStation.name !== stationAtRequest) return;
+    if (data.title && data.title.trim()) {
+      const el = document.getElementById('player-track');
+      if (el) {
+        const t = data.title.trim();
+        if (el.dataset.track !== t) {
+          el.dataset.track = t;
+          el.textContent = t + '   \u2022   ' + t + '   \u2022   ' + t;
           el.classList.add('scrolling');
         }
-        if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
-          navigator.mediaSession.metadata.title = data.title;
-        }
+      }
+      if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
+        navigator.mediaSession.metadata.title = data.title;
       }
     }
   } catch(e) {}
 }
 
-async function fetchIcyMetaOld() {
-  if (!currentStation) return;
-  try {
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(currentStation.streamURL)}`;
-    const resp = await fetch(proxyUrl, {
-      headers: { 'Icy-MetaData': '1' },
-      method: 'GET',
-      signal: AbortSignal.timeout(4000)
-    });
-    const icyInterval = resp.headers.get('icy-metaint');
-    if (!icyInterval) return;
-    const reader = resp.body.getReader();
-    const interval = parseInt(icyInterval);
-    let bytesRead = 0;
-    let buffer = new Uint8Array(0);
-    const readChunk = async () => {
-      const { done, value } = await reader.read();
-      if (done) return;
-      buffer = concat(buffer, value);
-      bytesRead += value.length;
-      if (bytesRead >= interval + 4080) {
-        // Extract metadata from buffer
-        const metaLenByte = buffer[interval];
-        const metaLen = metaLenByte * 16;
-        if (metaLen > 0 && buffer.length >= interval + 1 + metaLen) {
-          const metaBytes = buffer.slice(interval + 1, interval + 1 + metaLen);
-          const metaStr = new TextDecoder('utf-8', {fatal:false}).decode(metaBytes).replace(/ /g,'');
-          const match = metaStr.match(/StreamTitle='([^']+)'/);
-          if (match && match[1] && match[1].trim()) {
-            const track = match[1].trim();
-            if (track && track !== currentStation.name) {
-              const tel2 = document.getElementById('player-track'); if (tel2) tel2.textContent = track;
-              // Update MediaSession
-              if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
-                navigator.mediaSession.metadata.title = track;
-              }
-            }
-          }
-        }
-        reader.cancel();
-        return;
-      }
-      readChunk();
-    };
-    readChunk();
-  } catch(e) {}
-}
-
-function concat(a, b) {
-  const c = new Uint8Array(a.length + b.length);
-  c.set(a); c.set(b, a.length); return c;
-}
 function stopMetaPolling() {
   if (metaInterval) { clearInterval(metaInterval); metaInterval = null; }
   const el = document.getElementById('player-track');
-  if (el) { el.textContent = ''; el.classList.remove('scrolling'); }
+  if (el) { el.textContent = ''; el.classList.remove('scrolling'); delete el.dataset.track; }
 }
 
 function updateMediaSession() {
