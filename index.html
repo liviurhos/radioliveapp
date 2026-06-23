@@ -1651,18 +1651,12 @@ async function handleFormSubmit(e) {
   btn.textContent = 'Sending…';
   btn.disabled = true;
   try {
-    const resp = await fetch('https://proxy.radioliveapp.co.uk/contact', {
+    const resp = await fetch('https://formspree.io/f/mjgavyqr', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name:    document.getElementById('cf-name').value,
-        email:   document.getElementById('cf-email').value,
-        subject: document.getElementById('cf-subject').value,
-        message: document.getElementById('cf-message').value
-      })
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(form)
     });
-    const data = await resp.json();
-    if (data.ok) {
+    if (resp.ok) {
       form.style.display = 'none';
       document.getElementById('form-success').classList.add('visible');
     } else {
