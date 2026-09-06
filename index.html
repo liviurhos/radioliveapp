@@ -217,47 +217,37 @@
     .store-badge.gplay .sb-top { text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.55rem; }
 
     /* ═══════════════════════════════════════════
-       MAIN CONTENT (sidebar + list)
+       MAIN CONTENT (full-width list, no blocking sidebar)
     ═══════════════════════════════════════════ */
     .main-content {
       max-width: 1100px; margin: 0 auto;
       padding: 0 20px 40px;
-      display: grid; grid-template-columns: 260px 1fr; gap: 20px;
     }
 
-    /* Sidebar */
-    .sidebar {
-      position: sticky; top: calc(var(--header-h) + 16px);
-      height: calc(100vh - var(--header-h) - var(--player-h) - 32px);
-      overflow-y: auto; overflow-x: hidden;
-      scrollbar-width: thin;
+    /* ═══════════════════════════════════════════
+       QUICK BAR — search + 2 dropdowns, above the fold
+    ═══════════════════════════════════════════ */
+    .quick-bar {
+      width: 100%; max-width: 640px; margin: 28px auto 0;
+      display: flex; flex-direction: column; gap: 10px;
     }
-    .sidebar-section { margin-bottom: 16px; }
-    .sidebar-label {
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--text-secondary);
-      padding: 0 4px; margin-bottom: 8px;
+    .quick-bar-row { display: flex; gap: 10px; }
+    .quick-bar-row .search-wrap { flex: 1; margin-bottom: 0; }
+    .select-wrap { position: relative; flex: 1; }
+    .select-wrap select {
+      width: 100%; appearance: none; -webkit-appearance: none;
+      padding: 10px 34px 10px 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text-primary);
+      font: 500 0.875rem var(--font-body);
+      outline: none; cursor: pointer; transition: all var(--transition);
     }
-
-    .country-btn {
-      width: 100%; text-align: left;
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 12px; border-radius: var(--radius-sm);
-      color: var(--text-secondary); font-size: 0.875rem;
-      transition: all var(--transition); position: relative;
-      border: 1px solid transparent;
-    }
-    .country-btn:hover { color: var(--text-primary); background: var(--surface2); }
-    .country-btn.active {
-      color: var(--accent);
-      background: rgba(74,144,217,0.1);
-      border-color: rgba(74,144,217,0.25);
-    }
-    .country-btn .flag { font-size: 1.05rem; }
-    .country-btn .count {
-      margin-left: auto; font-family: var(--font-mono);
-      font-size: 0.7rem; color: var(--text-secondary);
-      background: var(--surface2); padding: 1px 6px; border-radius: 99px;
+    .select-wrap select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .select-wrap::after {
+      content: ''; position: absolute; right: 13px; top: 50%;
+      width: 8px; height: 8px; margin-top: -5px;
+      border-right: 2px solid var(--text-secondary); border-bottom: 2px solid var(--text-secondary);
+      transform: rotate(45deg); pointer-events: none;
     }
 
     /* Search */
@@ -278,27 +268,21 @@
       color: var(--text-secondary); pointer-events: none;
     }
 
-    /* Genre filter pills */
-    .genre-pills {
-      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;
-    }
-    .genre-pill {
-      padding: 4px 11px; border-radius: 99px; font-size: 0.75rem;
-      border: 1px solid var(--border); background: var(--surface);
-      color: var(--text-secondary); transition: all var(--transition);
-    }
-    .genre-pill:hover { border-color: var(--accent); color: var(--accent); }
-    .genre-pill.active {
-      background: var(--accent); color: #fff; border-color: var(--accent);
-    }
-
     /* Station list */
-    .station-area { min-height: 500px; }
+    .station-area { min-height: 500px; margin-top: 28px; }
     .station-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 8px;
     }
+    .load-more-wrap { display: flex; justify-content: center; margin-top: 20px; }
+    .load-more-btn {
+      padding: 11px 28px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text-primary); font-size: 0.85rem; font-weight: 600;
+      transition: all var(--transition);
+    }
+    .load-more-btn:hover { border-color: var(--accent); color: var(--accent); }
     .station-card {
       display: flex; align-items: center; gap: 14px;
       padding: 12px 14px; border-radius: var(--radius);
@@ -582,7 +566,8 @@
        MOBILE MENU
     ═══════════════════════════════════════════ */
     .nav-mobile {
-      display: none; position: fixed; inset: 0; z-index: 800;
+      display: none; position: fixed; inset: 0; z-index: 950;
+      width: 100vw; height: 100vh; height: 100dvh;
       background: var(--bg);
       flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
     }
@@ -593,6 +578,17 @@
       color: var(--text-secondary); transition: color var(--transition);
     }
     .nav-mobile a:hover { color: var(--text-primary); }
+    .nav-mobile-close {
+      position: absolute; top: 16px; right: 20px;
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-primary);
+    }
+    body.nav-locked { overflow: hidden; }
+    /* Burger -> X animation */
+    .mob-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .mob-btn.open span:nth-child(2) { opacity: 0; }
+    .mob-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
     /* ═══════════════════════════════════════════
        RESPONSIVE
@@ -600,14 +596,10 @@
     @media (max-width: 800px) {
       .nav-links { display: none; }
       .mob-btn { display: flex; }
-      .main-content { grid-template-columns: 1fr; }
-      .sidebar { position: relative; top: 0; }
-      .country-btn { display: inline-flex; width: auto; }
-      .sidebar-section .countries-list {
-        display: flex; flex-wrap: wrap; gap: 6px;
-      }
-      .hero { padding: 28px 20px 20px; }
+      .hero { padding: 20px 20px 16px; }
       .hero-text h1 { font-size: 1.5rem; }
+      .quick-bar { margin-top: 18px; }
+      .quick-bar-row { flex-direction: row; }
       .volume-wrap { display: none; }
       .player-name { max-width: 130px; }
       .station-grid { grid-template-columns: 1fr; }
@@ -619,22 +611,19 @@
     .fade-in { animation: fadeIn 0.35s ease forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Pill "LIVE" badge */
-    .live-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 3px 8px; border-radius: 99px;
-      background: rgba(239,68,68,0.15); color: #ef4444;
-      border: 1px solid rgba(239,68,68,0.3);
+    /* App store rating row */
+    .rating-row {
+      display: flex; gap: 20px; margin-top: 14px; flex-wrap: wrap; justify-content: center;
     }
-    .live-badge .dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: #ef4444; animation: pulse-dot 1s ease infinite;
+    .rating-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-secondary); }
+    .rating-item .stars { display: flex; gap: 1px; color: #f5a623; }
+    .rating-item .stars svg { width: 13px; height: 13px; }
+    .rating-item strong { color: var(--text-primary); font-weight: 700; }
+    .rating-item .new-badge {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
+      color: var(--accent); background: rgba(74,144,217,0.1);
+      padding: 2px 8px; border-radius: 99px; border: 1px solid rgba(74,144,217,0.25);
     }
-
-
-
 
     .results-bar {
       font-size: 0.78rem; color: var(--text-secondary);
@@ -699,13 +688,16 @@
         <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
-      <button class="mob-btn" id="mobBtn" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
+      <button class="mob-btn" id="mobBtn" onclick="toggleMobileNav()" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
 
 <!-- MOBILE NAV -->
 <div class="nav-mobile" id="mobile-nav">
+  <button class="nav-mobile-close" onclick="closeMobileNav()" aria-label="Close menu">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
   <a href="#" onclick="showPage('home'); closeMobileNav()">Player</a>
   <a href="#" onclick="showPage('about'); closeMobileNav()">About</a>
   <a href="#" onclick="showPage('faq'); closeMobileNav()">FAQ</a>
@@ -723,47 +715,46 @@
     <div class="hero-text">
       <h1>Stream Radio<br><span class="hl">Worldwide</span></h1>
       <p>Hundreds of stations from Romania, Germany, USA, UK and more. No account, no ads, just music.</p>
+
+      <!-- Quick bar: search + country/genre dropdowns, above the fold -->
+      <div class="quick-bar">
+        <div class="search-wrap">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input class="search-input" type="text" id="search-input" placeholder="Search stations…" oninput="handleSearch()" />
+        </div>
+        <div class="quick-bar-row">
+          <div class="select-wrap">
+            <select id="country-select" onchange="loadStations(this.value)" aria-label="Country">
+              <!-- populated by JS -->
+            </select>
+          </div>
+          <div class="select-wrap" id="genre-wrap" style="display:none">
+            <select id="genre-select" onchange="selectGenre(this.value)" aria-label="Genre">
+              <option value="">All genres</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div class="hero-stats">
         <div class="stat"><div class="stat-num" id="stat-stations">2000+</div><div class="stat-label">Stations</div></div>
         <div class="stat"><div class="stat-num" id="stat-countries">25</div><div class="stat-label">Countries</div></div>
-        <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Live</div></div>
+        <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Uptime</div></div>
       </div>
       <div class="app-badges">
         <a class="store-badge apple" href="https://apps.apple.com/us/app/radiolive-app/id6781333086" target="_blank" rel="noopener"><svg width="22" height="26" viewBox="0 0 24 28" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M17.05 21.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 16.25 3.51 8.59 9.05 8.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 8.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg><span class="sb-text"><span class="sb-top">Download on the</span><span class="sb-bottom">App Store</span></span></a>
         <a class="store-badge gplay" href="https://play.google.com/store/apps/details?id=com.innovationhubstudio.radiolive" target="_blank" rel="noopener"><svg width="22" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#00A0FF" d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92z"/><path fill="#00E676" d="M5.864 2.658L16.802 8.99l-2.303 2.303-8.635-8.635z"/><path fill="#FFCE00" d="M17.698 9.509l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.192 12l2.506-2.491z"/><path fill="#FF3A44" d="M14.499 12.707l2.302 2.302-10.937 6.333 8.635-8.635z"/></svg><span class="sb-text"><span class="sb-top">Get it on</span><span class="sb-bottom">Google Play</span></span></a>
-        <span class="live-badge"><span class="dot"></span>Live</span>
+      </div>
+      <div class="rating-row" id="rating-row">
+        <!-- populated by JS: real stars if APP_RATINGS set, otherwise a "New" badge -->
       </div>
     </div>
   </section>
 
   <!-- Main -->
   <div class="main-content">
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <!-- Search -->
-      <div class="search-wrap">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input class="search-input" type="text" id="search-input" placeholder="Search stations…" oninput="handleSearch()" />
-      </div>
-
-      <!-- Countries -->
-      <div class="sidebar-section">
-        <div class="sidebar-label">Countries</div>
-        <div class="countries-list" id="countries-list">
-          <!-- populated by JS -->
-        </div>
-      </div>
-
-      <!-- Genres -->
-      <div class="sidebar-section" id="genre-section" style="display:none">
-        <div class="sidebar-label">Genre</div>
-        <div class="genre-pills" id="genre-pills"></div>
-      </div>
-    </aside>
-
     <!-- Station List -->
     <section class="station-area">
       <div class="results-bar">
@@ -776,6 +767,9 @@
         <div class="skeleton skeleton-card"></div>
         <div class="skeleton skeleton-card"></div>
         <div class="skeleton skeleton-card"></div>
+      </div>
+      <div class="load-more-wrap" id="load-more-wrap" style="display:none">
+        <button class="load-more-btn" id="load-more-btn" onclick="loadMoreStations()">Load more stations</button>
       </div>
     </section>
   </div>
@@ -1259,10 +1253,14 @@ function showPage(page) {
 })();
 
 function toggleMobileNav() {
-  document.getElementById('mobile-nav').classList.toggle('open');
+  const isOpen = document.getElementById('mobile-nav').classList.toggle('open');
+  document.getElementById('mobBtn').classList.toggle('open', isOpen);
+  document.body.classList.toggle('nav-locked', isOpen);
 }
 function closeMobileNav() {
   document.getElementById('mobile-nav').classList.remove('open');
+  document.getElementById('mobBtn').classList.remove('open');
+  document.body.classList.remove('nav-locked');
 }
 
 /* ═══════════════════════════════════════════
@@ -1304,8 +1302,18 @@ const COUNTRIES_CONFIG = [
 
 const BASE_URL = 'https://raw.githubusercontent.com/liviurhos/radio-stations/main/';
 const PROXY_URL = 'https://proxy.radioliveapp.co.uk/stream?url=';
+
+// Real App Store / Google Play ratings — set both to show stars,
+// leave as null to show a "New app" badge instead of fabricated numbers.
+const APP_RATINGS = {
+  ios:     { value: null, count: null },
+  android: { value: null, count: null }
+};
+
+const PAGE_SIZE = 30;
 let allStations = [];
 let filteredStations = [];
+let visibleCount = PAGE_SIZE;
 let currentCountry = 'RO';
 let currentGenre = null;
 let searchQuery = '';
@@ -1323,6 +1331,7 @@ async function loadStations(countryCode) {
   currentCountry = countryCode;
   currentGenre = null;
   searchQuery = '';
+  visibleCount = PAGE_SIZE;
   document.getElementById('search-input').value = '';
 
   showSkeletons();
@@ -1336,7 +1345,7 @@ async function loadStations(countryCode) {
     const resp = await fetch(url);
     const data = await resp.json();
     allStations = data.station || [];
-    renderCountryBtns();
+    renderCountrySelect();
     extractGenres();
     applyFilters();
   } catch(e) {
@@ -1368,21 +1377,18 @@ function extractGenres() {
       });
     }
   });
-  const genres = [...genreSet].slice(0, 12);
-  const container = document.getElementById('genre-pills');
-  const section = document.getElementById('genre-section');
-  if (genres.length === 0) { section.style.display = 'none'; return; }
-  section.style.display = '';
-  container.innerHTML = genres.map(g =>
-    `<button class="genre-pill" onclick="setGenre('${g.replace(/'/g,"&#39;")}')">${g}</button>`
-  ).join('');
+  const genres = [...genreSet].sort((a,b) => a.localeCompare(b));
+  const select = document.getElementById('genre-select');
+  const wrap = document.getElementById('genre-wrap');
+  if (genres.length === 0) { wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+  select.innerHTML = '<option value="">All genres</option>' +
+    genres.map(g => `<option value="${escHtml(g)}">${escHtml(g)}</option>`).join('');
 }
 
-function setGenre(g) {
-  currentGenre = currentGenre === g ? null : g;
-  document.querySelectorAll('.genre-pill').forEach(p => {
-    p.classList.toggle('active', p.textContent === currentGenre);
-  });
+function selectGenre(g) {
+  currentGenre = g || null;
+  visibleCount = PAGE_SIZE;
   applyFilters();
 }
 
@@ -1408,23 +1414,34 @@ function handleSearch() {
   clearTimeout(searchDebounce);
   searchDebounce = setTimeout(() => {
     searchQuery = document.getElementById('search-input').value;
+    visibleCount = PAGE_SIZE;
     applyFilters();
   }, 200);
+}
+
+function loadMoreStations() {
+  visibleCount += PAGE_SIZE;
+  renderStations();
 }
 
 function renderStations() {
   const grid = document.getElementById('station-grid');
   const label = document.getElementById('results-label');
+  const loadMoreWrap = document.getElementById('load-more-wrap');
   label.innerHTML = `<strong>${filteredStations.length}</strong> station${filteredStations.length !== 1 ? 's' : ''}`;
 
   if (filteredStations.length === 0) {
     grid.innerHTML = `<div class="empty-state">
       <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <h3>No stations found</h3><p>Try a different search or genre.</p></div>`;
+    loadMoreWrap.style.display = 'none';
     return;
   }
 
-  grid.innerHTML = filteredStations.map((s, i) => {
+  const stationsToShow = filteredStations.slice(0, visibleCount);
+  loadMoreWrap.style.display = filteredStations.length > visibleCount ? 'flex' : 'none';
+
+  grid.innerHTML = stationsToShow.map((s, i) => {
     const abbr = (s.name||'??').substring(0,2).toUpperCase();
     const logoHtml = s.imageURL
       ? `<img class="station-logo" src="${escHtml(s.imageURL)}" alt="" loading="lazy"
@@ -1467,14 +1484,29 @@ function escHtml(s) {
 /* ═══════════════════════════════════════════
    COUNTRIES SIDEBAR
 ═══════════════════════════════════════════ */
-function renderCountryBtns() {
-  const container = document.getElementById('countries-list');
-  container.innerHTML = COUNTRIES_CONFIG.map(c =>
-    `<button class="country-btn${c.code === currentCountry ? ' active' : ''}" onclick="loadStations('${c.code}')">
-      <span class="flag">${c.flag}</span>
-      <span>${c.label}</span>
-    </button>`
+function renderCountrySelect() {
+  const select = document.getElementById('country-select');
+  select.innerHTML = COUNTRIES_CONFIG.map(c =>
+    `<option value="${c.code}"${c.code === currentCountry ? ' selected' : ''}>${c.flag} ${c.label}</option>`
   ).join('');
+}
+
+function renderRatingRow() {
+  const el = document.getElementById('rating-row');
+  const { ios, android } = APP_RATINGS;
+  const starsSvg = (fillPct) => `<svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 5.6 6.1.6-4.6 4.2 1.3 6-5.4-3.1L4.6 17.4l1.3-6L1.3 7.2l6.1-.6z"/></svg>`;
+  if (!ios.value && !android.value) {
+    el.innerHTML = `<span class="new-badge">New App — be the first to rate</span>`;
+    return;
+  }
+  let html = '';
+  if (ios.value) {
+    html += `<span class="rating-item"><span class="stars">${starsSvg().repeat(5)}</span><strong>${ios.value}</strong> App Store${ios.count ? ` (${ios.count})` : ''}</span>`;
+  }
+  if (android.value) {
+    html += `<span class="rating-item"><span class="stars">${starsSvg().repeat(5)}</span><strong>${android.value}</strong> Google Play${android.count ? ` (${android.count})` : ''}</span>`;
+  }
+  el.innerHTML = html;
 }
 
 /* ═══════════════════════════════════════════
@@ -1675,7 +1707,7 @@ async function handleFormSubmit(e) {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-renderCountryBtns();
+renderRatingRow();
 loadStations('RO');
 </script>
 </body>
